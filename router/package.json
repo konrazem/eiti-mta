@@ -1,0 +1,26 @@
+{
+  "name": "eiti-router",
+  "version": "1.0.0",
+  "description": "sap approuter a single entry point for the mta. This file runs only approuter.js",
+  "main": "node_modules/@sap/approuter/approuter.js",
+  "scripts": {
+    "start": "node ./node_modules/@sap/approuter/approuter.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/konrazem/eiti-router"
+  },
+  "keywords": [
+    "@sap/approuter.js"
+  ],
+  "author": "Konrad Grzyb",
+  "license": "ISC",
+  "dependencies": {
+    "@sap/approuter": "^6.1.2",
+    "@sap/xssec": "^2.2.4"
+  },
+  "engines": {
+    "node": "10.x.x"
+  },
+  "devDependencies": {}
+}

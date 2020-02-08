@@ -1,0 +1,8 @@
+{
+  "uaa": {
+    "url": "http://eiti-server.cfapps.eu10.hana.ondemand.com/",
+    "clientid": "konrazem",
+    "clientsecret": "!konrazem123",
+    "xsappname": "my-app"
+  }
+}

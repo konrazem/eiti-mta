@@ -1,0 +1,39 @@
+{
+    "xsappname": "eiti-app",
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.Create",
+            "description": "User can create data"
+        },
+        {
+            "name": "$XSAPPNAME.Read",
+            "description": "User can view data"
+        },
+        {
+            "name": "$XSAPPNAME.Update",
+            "description": "User can update data"
+        },
+        {
+            "name": "$XSAPPNAME.Delete",
+            "description": "User can delete data"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Employee",
+            "description": "User can read data",
+            "scope-references": ["$XSAPPNAME.Read"]
+        },
+        {
+            "name": "SalesDirector",
+            "description": "User can perform read and update data",
+            "scope-references": ["$XSAPPNAME.Read", "$XSAPPNAME.Update"]
+        },
+        {
+            "name": "ProductManager",
+            "description": "User can perform all CRUD operations on data",
+            "scope-references": ["$XSAPPNAME.Create", "$XSAPPNAME.Read", "$XSAPPNAME.Update", "$XSAPPNAME.Delete"]
+        }
+    ]
+}

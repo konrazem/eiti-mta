@@ -1,0 +1,11 @@
+---
+applications:
+  - name: eiti-app
+    instances: 1
+    memory: 512M
+    # docker:
+    #   image: konrazem/eiti-app:staging
+    env:
+      NODE_ENV: cloudfoundry
+    services:
+      - xsuaa

@@ -1,0 +1,52 @@
+$font-primary: -apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+"Roboto",
+"Oxygen",
+"Ubuntu",
+"Cantarell",
+"Fira Sans",
+"Droid Sans",
+"Helvetica Neue",
+sans-serif;
+
+
+$font-secondary: source-code-pro,
+Menlo,
+Monaco,
+Consolas,
+"Courier New",
+monospace;
+
+
+body {
+    margin: 0;
+    font-family: $font-primary;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: $font-secondary;
+}
+
+
+.paper {
+    padding: 20px;
+    margin: 10px;
+}
+
+
+.eiti-footer-wrapper {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.eiti-profile-wrapper {
+    padding: 10px;
+
+}
+
+.eiti-body-wrapper {
+    padding: 10px;
+}
