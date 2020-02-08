@@ -1,5 +1,5 @@
 {
-  "name": "eiti-app-build",
+  "name": "eiti-mta-app-build",
   "version": "1.0.0",
   "scripts": {
     "start": "serve -s build"
@@ -7,7 +7,7 @@
   "description": "to run react build",
   "main": "index.js",
   "repository": "https://github.com/konrazem/eiti-app",
-  "author": "konrazem",
+  "author": "Konrad Grzyb",
   "license": "MIT",
   "dependencies": {
     "serve": "^11.3.0"

@@ -1,5 +1,5 @@
 {
-  "name": "eiti-router",
+  "name": "eiti-mta-router",
   "version": "1.0.0",
   "description": "sap approuter a single entry point for the mta. This file runs only approuter.js",
   "main": "node_modules/@sap/approuter/approuter.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "/konrazem/eiti-router"
+    "url": "/konrazem/eiti-mta"
   },
   "keywords": [
     "@sap/approuter.js"
