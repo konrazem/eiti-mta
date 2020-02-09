@@ -1,5 +1,5 @@
 {
-  "name": "eiti-mta-app-build",
+  "name": "eiti-app-build",
   "version": "1.0.0",
   "scripts": {
     "start": "serve -s build"

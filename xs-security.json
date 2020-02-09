@@ -1,5 +1,5 @@
 {
-    "xsappname": "eiti-app",
+    "xsappname": "eiti",
     "tenant-mode": "dedicated",
     "scopes": [
         {

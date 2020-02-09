@@ -1,31 +1,23 @@
 {
-  "welcomeFile": "index.html", 
+  "welcomeFile": "/index.html",
   "sessionTimeout": 10,
   "routes": [
     {
+      "source": "^/(.*)$",
+      "localDir": "resources"
+    },
+    {
       "destination": "eiti-server",
-      "source": "^/api/v1/(.*)$",
-      "target": "$1",
+      "source": {
+        "path": "^/api/v1/(.*)$",
+        "matchCase": false
+      },
       "authenticationType": "xsuaa"
     },
     {
       "destination": "eiti-app-build",
-      "source": "^/app/(.*)",
-      "target": "$1",
+      "source": "^/(.*)$",
       "authenticationType": "xsuaa"
-    },
-    {
-      "source": "^/logout.html$",
-      "localDir": "resources",
-      "authenticationType": "none",
-      "cacheControl": "no-cache, no-store, must-revalidate"
     }
-  ],
-  "logout": {
-    "logoutEndpoint": "/logout",
-    "logoutPage": "/logout.html"
-  },
-  "login": {
-    "callbackEndpoint": "/custom/login/callback"
-  }
+  ]
 }

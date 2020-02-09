@@ -36,15 +36,6 @@ class App extends React.Component {
 
   }
 
-  testFetch() {
-
-    const url =
-        "http://localhost:5000/graphql?query=%7B%0A%20%20count%0A%7D%0A&variables=%7B%7D";
-
-    fetch(url)
-    .then(data => console.log('Test Data: ', data))
-    .catch(err => console.log('Test Error: ' + err.message));
-  }
   /**
    * fetchToken
    * By default the application router enables CSRF protection for any HTTP method that is not HEAD or GET and the route is not public. A path is considered public, if it does not require authentication. This is the case for routes with authenticationType: none or if authentication is disabled completely via the top level property authenticationMethod: none.
@@ -92,8 +83,6 @@ If a CSRF protected route is requested with any of the above mentioned methods, 
    * @memberof App
    */
   async componentDidMount() {
-
-    this.testFetch();
 
     const cache = new InMemoryCache();
     

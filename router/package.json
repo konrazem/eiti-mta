@@ -1,5 +1,5 @@
 {
-  "name": "eiti-mta-router",
+  "name": "eiti-router",
   "version": "1.0.0",
   "description": "sap approuter a single entry point for the mta. This file runs only approuter.js",
   "main": "node_modules/@sap/approuter/approuter.js",

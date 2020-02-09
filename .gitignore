@@ -37,7 +37,13 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 app/node_modules
+app-build/build
+
+app-build/node_modules
+build/build
+
 server/node_modules
+server/.env
 router/node_modules
 # Dependency directories
 node_modules/

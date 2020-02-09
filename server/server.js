@@ -2,7 +2,7 @@
  * @author kgrzyb
  * @copyright Politechnika Warszawska 2020
  * 
- * Detect environment. If 'production' use xsuaa service. 
+ * Detect environment. If 'prod' use xsuaa service. 
  * Use cors only for requests to the database with given whitelist!
  */
 
@@ -20,28 +20,34 @@ const passport = require('passport'); // to use JWTStrategy a plugin to authenti
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-require('dotenv').config() // to load environment vars from .env file like DATABASE_URL
+// require('dotenv').config() // to load environment vars from .env file like DATABASE_URL
 
 
 
 //**************** 
 // ENV
 //**************** 
-const NODE_ENV = process.env.NODE_ENV || 'production';
-const PORT = 5000; // forse to server on this port :) I dont care
+const NODE_ENV = process.env.NODE_ENV; // prod or development like in React
+const PORT = process.env.PORT || 5000;
 const DATABASE_URL = process.env.DATABASE_URL || "http://localhost:2701"; // use Atlas db if not localhost
-
+// TODO: add all apps names best - pass object, add xsuaa service name!
 
 
 // **************
 // APP SETTINGS
 // **************
 const app = express();
+//Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+  // app.use( bodyParser() );  // DEPRACTICATED use direct methods like bodyParser.urlencoded() or bodyParser.json() 
+
 const whitelist = [
-    "https://eiti-router.cfapps.eu10.hana.ondemand.com/",
-    "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
-    "http://localhost:3000",
-    "http://localhost:5000"
+  "https://eiti-router.cfapps.eu10.hana.ondemand.com/",
+  "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
+  "http://localhost:3000",
+  "http://localhost:3001",
+  // add itself to white list ??!
+  "http://localhost:" + PORT,
+  "https://eiti-server.cfapps.eu10.hana.ondemand.com/"
 ];
 const corsOptions = {
   origin: function(origin, callback) {
@@ -81,16 +87,19 @@ conn.on('connected', () => console.log('Mongo Connected :)'));
 // *******************************
 // AUTH
 // *******************************
-if (NODE_ENV === 'production') {
+if (NODE_ENV === 'prod') {
 
   const services = xsenv.getServices({ 
     xsuaa: { 
       name: "eiti-ser-xsuaa"
     } 
   });
-  const jwts = new xssec.JWTStrategy( services.uaa );
+
+
+  console.log("xsenv services: ", services);
+  
+  const jwts = new xssec.JWTStrategy( services.xsuaa );
   passport.use(jwts);
-  app.use( bodyParser() );  //Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
   app.use( passport.initialize() );
   app.use( passport.authenticate('JWT',  { session: false }) ); //authenticate() is used as route middleware to authenticate requests. here JWT token?
 
@@ -113,15 +122,15 @@ app.get('/', (req, res) => {
 });
 
 // Return local products do not auth!!
-app.get('/local/products', (req, res) => {
+app.get('/api/v1/local/products', (req, res) => {
   res.status(200).json(products);
 });
 
 
 
-app.get('/user', (req, res) => {
+app.get('/api/v1/user', (req, res) => {
   //If JWT token is present in the request and it is successfully verified, following objects are created:
-  if (NODE_ENV === 'production'){
+  if (NODE_ENV === 'prod'){
 
     res.status(200).json(req.authInfo); 
   } else { 
@@ -132,7 +141,7 @@ app.get('/user', (req, res) => {
 });
 
 // this REST not GraphQL!
-app.get('/products', cors(corsOptions), (req, res) => {
+app.get('/api/v1/products', cors(corsOptions), (req, res) => {
   // NOTE: req.query is always defined. If no query given Number({}) => NaN || 0 => 0
   const skip = Number(req.query.skip) || 0;
   const limit = Number(req.query.limit) || 100;
@@ -140,7 +149,7 @@ app.get('/products', cors(corsOptions), (req, res) => {
   
   const auth = true
   
-  if (NODE_ENV === 'production') {
+  if (NODE_ENV === 'prod') {
     // in case if dev env
     auth = req.authInfo.checkScope('$XSAPPNAME.Display');
   }
@@ -171,7 +180,7 @@ app.get('/products', cors(corsOptions), (req, res) => {
 
 
 // this is not REST but GraphQl. All methods are in graphql directory
-app.use('/graphql', cors(corsOptions), graphqlHTTP( req => {
+app.use('/api/v1/graphql', cors(corsOptions), graphqlHTTP( req => {
 
   /**
    * Custom context note: By implementing a custom context building function we access the network request and build  context object, and add currentUser to it. After that resolvers getting called by the GraphQL engine. However by default, the express request is passed as the GraphQL contex. 
@@ -179,7 +188,7 @@ app.use('/graphql', cors(corsOptions), graphqlHTTP( req => {
    */
   const auth = true
   
-  if (NODE_ENV === 'production') {
+  if (NODE_ENV === 'prod') {
     // in case if dev env
     auth = req.authInfo.checkScope('$XSAPPNAME.Display');
   }
@@ -188,7 +197,7 @@ app.use('/graphql', cors(corsOptions), graphqlHTTP( req => {
     return {
       schema: schema, 
       rootValue: root,
-      graphiql: true, 
+      graphiql: NODE_ENV === 'prod' ? false : true, // do not use graphiql on prod
       customFormatErrorFn: (error) => ({
         message: error.message,
         details: config.isProduction ? null : error.stack

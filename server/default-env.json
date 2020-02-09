@@ -1,0 +1,59 @@
+{
+ "VCAP_SERVICES": {
+  "xsuaa": [
+   {
+    "binding_name": null,
+    "credentials": {
+     "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
+     "clientid": "sb-eiti!t34180",
+     "clientsecret": "jktwDnffRd6sFQU/93WAxdUscN0=",
+     "identityzone": "p2000918395trial",
+     "identityzoneid": "e101cf9b-7803-433e-a08d-b8f99bf9330c",
+     "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
+     "tenantid": "e101cf9b-7803-433e-a08d-b8f99bf9330c",
+     "tenantmode": "dedicated",
+     "uaadomain": "authentication.eu10.hana.ondemand.com",
+     "url": "https://p2000918395trial.authentication.eu10.hana.ondemand.com",
+     "verificationkey": "-----BEGIN PUBLIC KEY-----MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwThn6OO9kj0bchkOGkqYBnV1dQ3zU/xtj7Kj7nDd8nyRMcEWCtVzrzjzhiisRhlrzlRIEY82wRAZNGKMnw7cvCwNixcfcDJnjzgr2pJ+5/yDZUc0IXXyIWPZD+XdL+0EogC3d4+fqyvg/BF/F0t2hKHWr/UTXE6zrGhBKaL0d8rKfYd6olGWigFd+3+24CKI14zWVxUBtC+P9Fhngc9DRzkXqhxOK/EKn0HzSgotf5duq6Tmk9DCNM4sLW4+ERc6xzrgbeEexakabvax/Az9WZ4qhwgw+fwIhKIC7WLwCEJaRsW4m7NKkv+eJR2LKYesuQ9SVAJ3EXV86RwdnH4uAv7lQHsKURPVAQBlranSqyQu0EXs2N9OlWTxe+FyNkIvyZvoLrZl/CdlYc8AKxRm5rn2/88nkrYQ0XZSrnICM5FRWgVF2hn5KfZGwtBN85/D4Yck6B3ocMfyX7e4URUm9lRPQFUJGTXaZnEIge0R159HUwhTN1HvyXrs6uT1ZZmW+c3p47dw1+LmUf/hIf8zd+uvHQjIeHEJqxjqfyA8yqAFKRHKVFrwnwdMHIsRap2EKBhHMfeVf0P2th5C9MggYoGCvdIaIUgMBX3TtCdvGrcWML7hnyS2zkrlA8SoKJnRcRF2KxWKs355FhpHpzqyZflO5l98+O8wOsFjGpL9d0ECAwEAAQ==-----END PUBLIC KEY-----",
+     "xsappname": "eiti!t34180"
+    },
+    "instance_name": "eiti-ser-xsuaa",
+    "label": "xsuaa",
+    "name": "eiti-ser-xsuaa",
+    "plan": "application",
+    "provider": null,
+    "syslog_drain_url": null,
+    "tags": [
+     "xsuaa"
+    ],
+    "volume_mounts": []
+   }
+  ]
+ },
+ "VCAP_APPLICATION": {
+  "application_id": "8fd23a9a-411d-4a97-aca7-29f6f8e018f4",
+  "application_name": "eiti-server",
+  "application_uris": [
+   "eiti-server.cfapps.eu10.hana.ondemand.com"
+  ],
+  "application_version": "dbee5a32-6557-4382-885f-162396e77997",
+  "cf_api": "https://api.cf.eu10.hana.ondemand.com",
+  "limits": {
+   "disk": 1024,
+   "fds": 16384,
+   "mem": 128
+  },
+  "name": "eiti-server",
+  "organization_id": "b5e66c34-3e27-4e71-9ffe-4ef12bc1ff53",
+  "organization_name": "P2000918395trial_trial",
+  "process_id": "8fd23a9a-411d-4a97-aca7-29f6f8e018f4",
+  "process_type": "web",
+  "space_id": "8547b15c-d6e4-48d9-8d15-055135862b3b",
+  "space_name": "dev",
+  "uris": [
+   "eiti-server.cfapps.eu10.hana.ondemand.com"
+  ],
+  "users": null,
+  "version": "dbee5a32-6557-4382-885f-162396e77997"
+ }
+}
