@@ -22,7 +22,7 @@ const root = {
 
     const { group } = require('../mongoose/aggregation');
     // here pass token to auth graphql ? https://graphql.org/graphql-js/authentication-and-express-middleware/
-    return Products.aggregate([group, {
+    return Products.aggregate([ group, {
       '$sort': {
         'price': 1
       }

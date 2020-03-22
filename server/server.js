@@ -20,7 +20,7 @@ const passport = require('passport'); // to use JWTStrategy a plugin to authenti
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// require('dotenv').config() // to load environment vars from .env file like DATABASE_URL
+require('dotenv').config() // to load environment vars from .env file like DATABASE_URL
 
 
 
@@ -31,7 +31,7 @@ const NODE_ENV = process.env.NODE_ENV; // prod or development like in React
 const PORT = process.env.PORT || 5000;
 const DATABASE_URL = process.env.DATABASE_URL || "http://localhost:2701"; // use Atlas db if not localhost
 // TODO: add all apps names best - pass object, add xsuaa service name!
-
+const WHITE_APP = process.env.WHITE_APP;
 
 // **************
 // APP SETTINGS
@@ -40,21 +40,13 @@ const app = express();
 //Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
   // app.use( bodyParser() );  // DEPRACTICATED use direct methods like bodyParser.urlencoded() or bodyParser.json() 
 
-const whitelist = [
-  "https://eiti-router.cfapps.eu10.hana.ondemand.com/",
-  "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
-  "http://localhost:3000",
-  "http://localhost:3001",
-  // add itself to white list ??!
-  "http://localhost:" + PORT,
-  "https://eiti-server.cfapps.eu10.hana.ondemand.com/"
-];
+const whitelist = ["http://localhost:3000", WHITE_APP];
 const corsOptions = {
   origin: function(origin, callback) {
     // check index of origin in whitelist, if not -1 there is index for origin
     if ((whitelist.indexOf(origin) !== -1 ) || !origin ) {
       // If you do not want to block REST tools or server-to-server requests.
-      
+    
       callback(null, true); // if false pause() the socket. null as buffer bytes data?
     } else {
       // there is no such orgin in whitelist 
@@ -62,7 +54,6 @@ const corsOptions = {
     }
   }
 }
-
 
 
 // *******************************
@@ -125,7 +116,6 @@ app.get('/', (req, res) => {
 app.get('/api/v1/local/products', (req, res) => {
   res.status(200).json(products);
 });
-
 
 
 app.get('/api/v1/user', (req, res) => {
@@ -199,14 +189,13 @@ app.use('/api/v1/graphql', cors(corsOptions), graphqlHTTP( req => {
       rootValue: root,
       graphiql: NODE_ENV === 'prod' ? false : true, // do not use graphiql on prod
       customFormatErrorFn: (error) => ({
-        message: error.message,
-        details: config.isProduction ? null : error.stack
+        message: error.message
+        // details: config.isProduction ? null : error.stack
       })
     }
 
   } else {
     res.status(404).send('Forbidden');
-
   }
  
 })); 
