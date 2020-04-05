@@ -41,6 +41,7 @@ const app = express();
   // app.use( bodyParser() );  // DEPRACTICATED use direct methods like bodyParser.urlencoded() or bodyParser.json() 
 
 const whitelist = ["http://localhost:3000", WHITE_APP];
+
 const corsOptions = {
   origin: function(origin, callback) {
     // check index of origin in whitelist, if not -1 there is index for origin
@@ -54,6 +55,7 @@ const corsOptions = {
     }
   }
 }
+app.use(cors(corsOptions));
 
 
 // *******************************
@@ -118,6 +120,18 @@ app.get('/api/v1/local/products', (req, res) => {
 });
 
 
+// get Token
+app.get('/token', (req, res) => {
+  if (req.authInfo) {
+
+      res.status(200).json(req.authInfo); 
+  } else {
+
+    res.status(404).json({});
+  }
+});
+
+
 app.get('/api/v1/user', (req, res) => {
   //If JWT token is present in the request and it is successfully verified, following objects are created:
   if (NODE_ENV === 'prod'){
@@ -131,7 +145,7 @@ app.get('/api/v1/user', (req, res) => {
 });
 
 // this REST not GraphQL!
-app.get('/api/v1/products', cors(corsOptions), (req, res) => {
+app.get('/api/v1/products', (req, res) => {
   // NOTE: req.query is always defined. If no query given Number({}) => NaN || 0 => 0
   const skip = Number(req.query.skip) || 0;
   const limit = Number(req.query.limit) || 100;
@@ -170,7 +184,7 @@ app.get('/api/v1/products', cors(corsOptions), (req, res) => {
 
 
 // this is not REST but GraphQl. All methods are in graphql directory
-app.use('/api/v1/graphql', cors(corsOptions), graphqlHTTP( req => {
+app.use('/api/v1/graphql', graphqlHTTP( req => {
 
   /**
    * Custom context note: By implementing a custom context building function we access the network request and build  context object, and add currentUser to it. After that resolvers getting called by the GraphQL engine. However by default, the express request is passed as the GraphQL contex. 
