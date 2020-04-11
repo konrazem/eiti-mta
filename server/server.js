@@ -8,7 +8,7 @@
 
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
-const ProductsModel = require("./mongoose/models/Products");
+const Products = require("./mongoose/models/Products");
 const products = require("./resources/products.json"); // for local testing without database
 const mongoose = require("mongoose");
 const path = require("path");
@@ -19,6 +19,7 @@ const xssec = require("@sap/xssec");
 const passport = require("passport"); // to use JWTStrategy a plugin to authenticate requests
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { group } = require("./mongoose/aggregation");
 
 require("dotenv").config(); // to load environment vars from .env file like DATABASE_URL
 
@@ -119,7 +120,6 @@ app.get("/api/v1/local/products", (req, res) => {
 
 app.get("/api/v1/user", (req, res) => {
     //If JWT token is present in the request and it is successfully verified, following objects are created:
-    console.log(req.authInfo);
     // if on CF profile data in req.authInfo
     const info = req.authInfo || {
         id: "jan.kowalski@example.com",
@@ -130,6 +130,21 @@ app.get("/api/v1/user", (req, res) => {
     };
 
     res.status(200).json(info);
+});
+
+
+// get first product
+app.get("/api/v1/product", (req, res) => {
+
+    const id = req.query.id;
+    // you need to aggregate before :/ 
+    Products.findOne({ id })
+        .then(data => {
+            res.status(200).json(data);
+
+        })
+        .catch((err) => res.status(400).send("Error: ", err)); 
+    
 });
 
 // this REST not GraphQL!
@@ -146,10 +161,9 @@ app.get("/api/v1/products", (req, res) => {
         auth = req.authInfo.checkScope("$XSAPPNAME.Display");
     }
 
-    const { group } = require("./mongoose/aggregation");
 
     if (auth) {
-        ProductsModel.aggregate([
+        Products.aggregate([
             group,
             {
                 $sort: {
