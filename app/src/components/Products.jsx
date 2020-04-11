@@ -99,6 +99,7 @@ class Products extends React.Component {
      */
     render() {
         const { loading, data, networkStatus, rates } = this.state.res;
+        const history = this.props.history;
 
         if (typeof loading === "undefined") {
             return <Loading text="Loading products..." />
@@ -129,8 +130,10 @@ class Products extends React.Component {
                 onRowClick: function (rowData, rowMeta) {
                     // rowMeta: { dataIndex: number, rowIndex: number }
                     // Get ID and navigate to product
+
                     const ID = rowData[0];
                     console.log("Selected ID: " + ID);
+                    history.push("/product/" + ID);
                 },
 
                 // customToolbarSelect: function() {

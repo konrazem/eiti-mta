@@ -16,10 +16,6 @@ import HomeIcon from "@material-ui/icons/Home";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 
-
-
-
-
 /**
  * Material-UI Menu
  */
@@ -44,9 +40,6 @@ const StyledMenu = withStyles({
 ));
 
 
-
-
-
 /**
  * StyledMenuItem
  */
@@ -60,13 +53,6 @@ const StyledMenuItem = withStyles((theme) => ({
         },
     },
 }))(MenuItem);
-
-
-
-
-
-
-
 
 
 /**

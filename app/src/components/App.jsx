@@ -2,6 +2,7 @@ import React from "react";
 import Header from './Header';
 import Profile from './Profile';
 import NotFound from './NotFound';
+import Product from './Product';
 import Products from './Products';
 import Footer from "./Footer";
 import Loading from "./Loading";
@@ -129,6 +130,14 @@ class App extends React.Component {
                                     path="/"
                                     render={(props) => (
                                         <Products client={client} {...props} />
+                                    )}
+                                />
+
+                                <Route
+                                    exact
+                                    path="/product/:id"
+                                    render={(props) => (
+                                        <Product client={client} {...props} />
                                     )}
                                 />
 
