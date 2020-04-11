@@ -1,101 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import Loading from './Loading';
-import { UserConsumer } from '../context';
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar, ListSubheader } from '@material-ui/core';
-import { Box } from '@material-ui/core';
+import React, { useEffect, useState } from "react";
+import Loading from "./Loading";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import EmailIcon from "@material-ui/icons/Email";
+import {
+   List,
+   ListItem,
+   ListItemAvatar,
+   ListItemText,
+   Avatar
+} from "@material-ui/core";
 
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import EmailIcon from '@material-ui/icons/Email';
 
-import { makeStyles } from '@material-ui/core/styles';
+const HOST = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
 
-const useStyles = makeStyles(theme => ({
-   root: {
-      padding: theme.spacing(3, 2),
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-   }
-}));
 
-const Profile = props => {
+/**
+ * @name Profile
+ * @param {*} props
+ */
+const Profile = (props) => {
 
-   const [data, setData] = useState(null);
+   const [data, setData] = useState({
+      profile: {
+         id: "konradgrzyb@gmail.com",
+         name: {
+            givenName: "Konrad",
+            familyName: "Grzyb",
+         },
+      },
+      loaded: false,
+      error: ""
+   });
 
    useEffect(() => {
-      const _data = {
-         id: 'konradgrzyb@gmail.com',
-         name: {
-            givenName: 'Konrad',
-            familyName: 'Grzyb',
-         }
-      }
+      fetch(HOST + "/api/v1/user")
+         .then((res) => {
+            return res.json()
+         })
+         .then((data) => {
 
-      if (process.env.NODE_ENV === 'development') {
+            return setData({
+               profile: data,
+               loaded: true
+            });
+         })
+         .catch((err) => {
+            console.error("Error when fetching profile data. ", err.message);
+            //set default data
+            return setData({
+               loaded: true,
+               error: err.message
+            });
+         });
+   });
 
-         setTimeout(() => {
-            setData(_data)
-         }, 2000)
 
-      } else {
-
-         fetch('/api/user')
-            .then(res => res.json())
-            .then(data => setData(data))
-      }
-
-   }, [data]);
-
-   if (!data) {
-
-      return <Loading />
-
+   if (!data.loaded) {
+      return <Loading text="Loading user data..." />;
    }
 
-   return (<UserConsumer>
-      {context => {
+   /********************* RETURN PROFLE ******************** */
+   let email = "";
+   let name = "";
+   let surname = "";
+   
+   if (data.profile && data.profile.name) {
+      email = data.profile.id;
+      name = data.profile.name.givenName;
+      surname = data.profile.name.familyName;
+   }
 
-         const unknown = context.text.unknown;
-         const email = data.id || unknown;
-         const name = data.name ? data.name.givenName : unknown;
-         const surname = data.name ? data.name.familyName : unknown;
 
-         return (
-            <div className="eiti-profile-wrapper">
-               <List subheader={<ListSubheader>{context.text.profile}</ListSubheader>}>
+   return (
+      <div className="eiti-profile-wrapper">
+         <List subheader="User Profile">
+            <ListItem>
+               <ListItemAvatar>
+                  <Avatar>
+                     <EmailIcon />
+                  </Avatar>
+               </ListItemAvatar>
+               <ListItemText
+                  primary="Email"
+                  secondary={email}
+               />
+            </ListItem>
 
-                  <ListItem>
-                     <ListItemAvatar>
-                        <Avatar>
-                           <EmailIcon />
-                        </Avatar>
-                     </ListItemAvatar>
-                     <ListItemText primary={context.text.email} secondary={email} />
-                  </ListItem>
+            <ListItem>
+               <ListItemAvatar>
+                  <Avatar>
+                     <AssignmentIndIcon />
+                  </Avatar>
+               </ListItemAvatar>
+               <ListItemText primary="Name" secondary={name} />
+            </ListItem>
 
-                  <ListItem>
-                     <ListItemAvatar>
-                        <Avatar>
-                           <AssignmentIndIcon />
-                        </Avatar>
-                     </ListItemAvatar>
-                     <ListItemText primary={context.text.name} secondary={name} />
-                  </ListItem>
-
-                  <ListItem>
-                     <ListItemAvatar>
-                        <Avatar>
-                           <AssignmentIndIcon />
-                        </Avatar>
-                     </ListItemAvatar>
-                     <ListItemText primary={context.text.surname} secondary={surname} />
-                  </ListItem>
-
-               </List>
-            </div>)
-      }}
-   </UserConsumer>)
-
-}
+            <ListItem>
+               <ListItemAvatar>
+                  <Avatar>
+                     <AssignmentIndIcon />
+                  </Avatar>
+               </ListItemAvatar>
+               <ListItemText
+                  primary="Surname"
+                  secondary={surname}
+               />
+            </ListItem>
+         </List>
+      </div>
+   );
+};
 
 export default Profile;

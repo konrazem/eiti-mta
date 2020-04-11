@@ -119,12 +119,17 @@ app.get("/api/v1/local/products", (req, res) => {
 
 app.get("/api/v1/user", (req, res) => {
     //If JWT token is present in the request and it is successfully verified, following objects are created:
-    if (NODE_ENV === "prod") {
-        res.status(200).json(req.authInfo);
-    } else {
-        // trying to get info about user that do not exists
-        res.status(400).send("This is development environment");
-    }
+    console.log(req.authInfo);
+    // if on CF profile data in req.authInfo
+    const info = req.authInfo || {
+        id: "jan.kowalski@example.com",
+        name: {
+            givenName: "Jan",
+            familyName: "Kowalski",
+        },
+    };
+
+    res.status(200).json(info);
 });
 
 // this REST not GraphQL!

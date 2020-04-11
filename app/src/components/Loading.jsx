@@ -1,7 +1,6 @@
 import React from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Box } from "@material-ui/core";
-import { UserConsumer } from "../context";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 
@@ -10,9 +9,6 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         marginTop: theme.spacing(3),
         overflowX: "auto",
-    },
-    table: {
-        minWidth: 700,
     },
 }));
 
