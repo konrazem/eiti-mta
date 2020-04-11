@@ -138,12 +138,18 @@ app.get("/api/v1/product", (req, res) => {
 
     const id = req.query.id;
     // you need to aggregate before :/ 
-    Products.findOne({ id })
-        .then(data => {
-            res.status(200).json(data);
-
-        })
-        .catch((err) => res.status(400).send("Error: ", err)); 
+        Products.aggregate([
+            group,
+            {
+                $match: {
+                    '_id': id
+                }
+            }
+        ])
+            .then((data) => {
+                res.status(200).json(data);
+            })
+            .catch((err) => res.status(400).json("Error: ", err));
     
 });
 
