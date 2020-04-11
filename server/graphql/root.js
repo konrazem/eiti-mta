@@ -19,7 +19,7 @@ const root = {
   },
 
   products: ({ skip, limit }) => {
-
+    // not required skip and limit
     const { group } = require('../mongoose/aggregation');
     // here pass token to auth graphql ? https://graphql.org/graphql-js/authentication-and-express-middleware/
     return Products.aggregate([ group, {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Paper } from '@material-ui/core'; 
-import { UserConsumer } from '../../context';
+import { UserConsumer } from '../context';
 
 
 const useStyles = makeStyles( theme => ({

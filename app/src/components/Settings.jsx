@@ -1,10 +1,10 @@
 import React from 'react';
-import Loading from '../Loading';
+import Loading from './Loading';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { Button, TextField } from '@material-ui/core/';
-import { countQuery } from '../../graphql/queries';
+import { countQuery } from '../graphql/queries';
 
 
 import { Card, CardActions, CardHeader } from '@material-ui/core';

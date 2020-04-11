@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Loading from '../Loading';
-import { UserConsumer } from '../../context';
+import Loading from './Loading';
+import { UserConsumer } from '../context';
 import { List, ListItem, ListItemAvatar, ListItemText, Avatar, ListSubheader } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 

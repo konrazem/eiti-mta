@@ -27,7 +27,7 @@ const schema = buildSchema(`
     asins: String
     upc: String # The GraphQL specs limit the Integer type size to 32 bits. To be compliant, larger ints have to be treated as floats to prevent errors in query results. However not all upc numbers are float some are string and that cos error!!
     weight: String
-    cacategories: String
+    categories: String
     dateAdded: String
     dateUpdated: String
     keys: String
