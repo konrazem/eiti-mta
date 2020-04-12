@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
     const classes = useStyles();
     // anchor element is app bar icon
-    const title = "EITI App - " + process.env.NODE_ENV;
+    const env = process.env.NODE_ENV === "development" ? "Development" : "Production";
+
+    const title = "EITI App - " + env;
 
     return (
         <div className={classes.root}>

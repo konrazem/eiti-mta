@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import EmailIcon from "@material-ui/icons/Email";
-import ErrorPage from './ErrorPage';
+import InfoPage from './InfoPage';
 
 
 import {
@@ -62,7 +62,7 @@ class Profile extends React.Component {
        const { profile, loaded, error } = this.state;
 
         if(error) {
-            return <ErrorPage text="Server error while fetching user data" />
+            return <InfoPage text="Server error while fetching user data" />
         }
 
 

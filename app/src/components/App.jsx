@@ -1,12 +1,11 @@
 import React from "react";
 import Header from './Header';
 import Profile from './Profile';
-import NotFound from './NotFound';
+import InfoPage from './InfoPage';
 import Product from './Product';
 import Products from './Products';
 import Footer from "./Footer";
 import Loading from "./Loading";
-import ErrorPage from "./ErrorPage";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -105,7 +104,7 @@ class App extends React.Component {
         const { client, error } = this.state;
 
         if(error) {
-            return <ErrorPage text="Server error while loading application." />;
+            return <InfoPage text="Server error while loading application." />;
         }
 
         if (!client) {
@@ -114,43 +113,43 @@ class App extends React.Component {
 
         return (
             <Router>
-                    <div className="eiti-app-wrapper">
-                        <div className="eiti-header-wrapper">
-                            <Header />
-                        </div>
-
-                        <div className="eiti-body-wrapper">
-                            <Switch>
-                                <Route
-                                    exact
-                                    path="/"
-                                    render={(props) => (
-                                        <Products client={client} {...props} />
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path="/product/:id"
-                                    render={(props) => (
-                                        <Product client={client} {...props} />
-                                    )}
-                                />
-
-                                <Route
-                                    exact
-                                    path="/profile"
-                                    render={(props) => <Profile {...props} />}
-                                />
-
-                                <Route render={(props) => <NotFound />} />
-                            </Switch>
-                        </div>
-
-                        <div className="eiti-footer-wrapper">
-                            <Footer />
-                        </div>
+                <div className="eiti-app-wrapper">
+                    <div className="eiti-header-wrapper">
+                        <Header />
                     </div>
+
+                    <div className="eiti-body-wrapper">
+                        <Switch>
+                            <Route
+                                exact
+                                path="/"
+                                render={(props) => (
+                                    <Products client={client} {...props} />
+                                )}
+                            />
+
+                            <Route
+                                exact
+                                path="/product/:id"
+                                render={(props) => (
+                                    <Product client={client} {...props} />
+                                )}
+                            />
+
+                            <Route
+                                exact
+                                path="/profile"
+                                render={(props) => <Profile {...props} />}
+                            />
+
+                            <Route render={() => <InfoPage text="Page not found." />} />
+                        </Switch>
+                    </div>
+
+                    <div className="eiti-footer-wrapper">
+                        <Footer />
+                    </div>
+                </div>
             </Router>
         );
     }

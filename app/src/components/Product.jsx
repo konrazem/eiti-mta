@@ -1,22 +1,14 @@
 import React from "react";
-import Loading from './Loading';
-import ErrorPage from './ErrorPage';
+import Loading from "./Loading";
+import InfoPage from "./InfoPage";
 import { gql } from "apollo-boost";
-import {
-    List,
-    ListItem,
-    Grid,
-    ListItemText,
-    Typography,
-} from "@material-ui/core";
-
-
-
+import ProductStaticItems from "./ProductStaticItems";
+import ProductDynamicItems from "./ProductDynamicItems";
 
 /**
  * @class Product
  * @extends {React.Component}
- * @description 
+ * @description
  */
 class Product extends React.Component {
     /**
@@ -31,16 +23,15 @@ class Product extends React.Component {
             id: "",
             res: {}, // loaded is in res
             error: false,
+            editMode: false,
         };
     }
-
 
     /**
      * @name componentDidMount
      * @memberof Product
      */
     componentDidMount() {
-
         const id = "AVpgMuGwLJeJML43KY_c";
 
         // musisz pobrać id z linku!
@@ -79,11 +70,34 @@ class Product extends React.Component {
             .then((res) => {
                 this.setState({ id, res });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
                 this.setState({ id, error });
             });
+    }
 
+    handleEditClick() {
+        // turn on editMode
+        console.log("turn on edit mode");
+        this.setState({
+            editMode: true,
+        });
+    }
+
+    handleCancelClick() {
+        // turn off editMode
+        console.log("turn off edit mode");
+        this.setState({
+            editMode: false,
+        });
+    }
+
+    handleDeleteClick() {
+        console.log("handle delete");
+    }
+
+    handleSaveClick() {
+        console.log("handle save");
     }
 
     /**
@@ -95,157 +109,52 @@ class Product extends React.Component {
         const { loading, data, networkStatus, rates } = this.state.res;
 
         if (this.state.error) {
-            return <ErrorPage text="Error while fetching the product." />
+            return <InfoPage text="Error while fetching the product." />;
         }
 
         if (typeof loading === "undefined") {
-            return <Loading text="Loading product data..." />;
+            return (
+                <Loading
+                    text="Loading products' data..."
+                    changePrice={this.changePrice}
+                />
+            );
         }
-        const items = data.product[0] ? <ProductItem product={data.product[0]} /> : null;
 
-        return (
-            <div>
-                <Grid item xs={12} md={6}>
-                    <Typography variant="h6"> Product page </Typography>
+        if (!data.product.length) {
+            return <InfoPage text="Product was not found." />;
+        }
 
-                    <div className="eiti-products"> {items} </div>
+        // Here we have product to work with. We can be in the edit mode or not.
+        const product = data.product[0];
 
-                </Grid>
-            </div>
-        );
+        let items = null;
 
+        if (this.state.editMode) {
+            // if edit mode it on
+            items = (
+                <ProductDynamicItems
+                    product={product}
+                    handleCancelClick={this.handleCancelClick.bind(this)}
+                    handleSaveClick={this.handleSaveClick}
+                />
+            );
+        } else {
+            items = (
+                <ProductStaticItems
+                    product={product}
+                    handleEditClick={this.handleEditClick.bind(this)}
+                    handleDeleteClick={this.handleDeleteClick}
+                />
+            );
+        }
+
+        const style = {
+            flexGrow: 1,
+            padding: 10,
+        };
+        return <div style={style}> {items} </div>;
     }
-};
-
-function ProductItem(props) {
-    const product = props.product;
-    const style = {
-        wordBreak: "break-all"
-    };
-
-    
-    return (
-        <List dense={true}>
-            <ListItem style={style} >
-
-                <ListItemText primary="Id" secondary={product._id} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText primary="Name" secondary={product.name} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Price"
-                    secondary={product.price + " " + product.currency}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText primary="Brand" secondary={product.brand} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Condition"
-                    secondary={product.condition}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Is for sale"
-                    secondary={product.isSale}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText primary="Merchant" secondary={product.merchant} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText primary="Shipping" secondary={product.shipping} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-
-                <ListItemText primary="EAN" secondary={product.ean} />
-            </ListItem>
-            <ListItem style={style} >
-
-
-                <ListItemText primary="Asins" secondary={product.asins} />
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText primary="Weight" secondary={product.weight} />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Categories"
-                    secondary={product.categories}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Date added"
-                    secondary={product.dateAdded}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Date updated"
-                    secondary={product.dateUpdated}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-
-                <ListItemText
-                    primary="Manufacturer"
-                    secondary={product.manufacturer}
-                />
-
-            </ListItem>
-            <ListItem style={style} >
-                <ListItemText
-                    primary="Manufacturer number"
-                    secondary={product.manufacturerNumber}
-                />
-            </ListItem>
-
-            <ListItem style={style} >
-                <ListItemText primary="Primary categories" secondary={product.primaryCategories} />
-            </ListItem>
-
-            <ListItem style={style} >
-                <ListItemText primary="UPC" secondary={product.upc} />
-            </ListItem>
-
-            <ListItem style={style} >
-                <ListItemText primary="Keys" secondary={product.keys} />
-            </ListItem>
-
-            <ListItem style={style} >
-                <ListItemText primary="Source URLs" secondary={product.sourceURLs} />
-            </ListItem>
-        </List>
-    );
-
 }
-export default Product
+
+export default Product;
