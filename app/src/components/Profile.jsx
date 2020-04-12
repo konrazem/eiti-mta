@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import EmailIcon from "@material-ui/icons/Email";
+import ErrorPage from './ErrorPage';
+
+
 import {
     List,
     ListItem,
@@ -47,20 +50,21 @@ class Profile extends React.Component {
                 });
             })
             .catch((err) => {
-                console.error(
-                    "Error when fetching profile data. ",
-                    err.message
-                );
+                console.error(err);
                 //set default data
                 return this.setState({
-                    loaded: true,
-                    error: err.message,
+                    error: err + "",
                 });
             });
     }
 
     render() {
        const { profile, loaded, error } = this.state;
+
+        if(error) {
+            return <ErrorPage text="Server error while fetching user data" />
+        }
+
 
         if (!loaded) {
             return <Loading text="Loading user data..." />;

@@ -20,14 +20,15 @@ const root = {
   },
 
   product: ({ id }) => {
+    console.log(id);
     // get given product with max price 
     return Products.aggregate([
         group,
         {
-            '$match': {
+            $match: {
                 '_id': id,
             },
-        }
+        },
     ]).exec();
 
   },

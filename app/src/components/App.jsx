@@ -6,6 +6,7 @@ import Product from './Product';
 import Products from './Products';
 import Footer from "./Footer";
 import Loading from "./Loading";
+import ErrorPage from "./ErrorPage";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -26,7 +27,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            err: "",
+            error: "",
             client: null,
         };
     }
@@ -84,10 +85,9 @@ class App extends React.Component {
  
         })
         .catch(err => {
-
-          
+            console.error(err);
             this.setState({ 
-               err: err
+               error: err + ""
              });
 
 
@@ -102,10 +102,10 @@ class App extends React.Component {
      * @memberof App
      */
     render() {
-        const { client, err } = this.state;
+        const { client, error } = this.state;
 
-        if(err) {
-            return <h2>Pojwił się errorror: { err.message } </h2>
+        if(error) {
+            return <ErrorPage text="Server error while loading application." />;
         }
 
         if (!client) {
@@ -116,10 +116,6 @@ class App extends React.Component {
             <Router>
                     <div className="eiti-app-wrapper">
                         <div className="eiti-header-wrapper">
-                            {/* <LanSwitch
-                                    changeLan={this.changeLan.bind(this)}
-                                    lan={this.state.lan}
-                                /> */}
                             <Header />
                         </div>
 

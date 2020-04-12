@@ -135,7 +135,6 @@ app.get("/api/v1/user", (req, res) => {
 
 // get first product
 app.get("/api/v1/product", (req, res) => {
-
     const id = req.query.id;
     // you need to aggregate before :/ 
         Products.aggregate([

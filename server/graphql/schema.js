@@ -14,9 +14,9 @@ const schema = buildSchema(`
  
   
   type Product {
-    _id: ID!
+    _id: String
     name: String
-    price: Float!
+    price: Float
     currency: String
     brand: String
     condition: String
@@ -55,7 +55,7 @@ const schema = buildSchema(`
     count: Float # if bigger set than 32-bit
     user(id: ID): User
     users: [User]
-    product(id: ID): Product
+    product(id: String!): [Product]
     products(skip: Int, limit: Int): [Product]
   }
 
