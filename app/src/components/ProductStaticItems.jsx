@@ -1,10 +1,18 @@
 import React from "react";
-import ProductBar from "./ProductBar";
 import { convertStrToDate } from "../util";
 
-import { List, ListItem, Grid, ListItemText, Paper } from "@material-ui/core";
-
-
+import {
+    List,
+    ListItem,
+    Grid,
+    ListItemText,
+    Paper,
+    AppBar,
+    Button,
+    ButtonGroup,
+    Toolbar,
+    Typography,
+} from "@material-ui/core";
 
 /**
  * @name ProductStaticItems
@@ -23,29 +31,57 @@ export default function ProductStaticItems({
 }) {
     const _dateUpdated = convertStrToDate(product.dateUpdated);
     const _dateAdded = convertStrToDate(product.dateAdded);
+
     const style = {
-        wordBreak: "break-all",
+        input: {
+            wordBreak: "break-all",
+        },
+        root: {
+            flexGrow: 1,
+        },
+        title: {
+            flexGrow: 1,
+        },
+        bar: {
+            boxShadow: "none",
+        },
     };
 
     return (
         <React.Fragment>
-            <ProductBar
-                btn1="Edit"
-                handleBtn1={handleEditClick}
-                btn2="Delete"
-                handleBtn2={handleDeleteClick}
-            />
+            <div style={style.root}>
+                <AppBar position="static" color="inherit" style={style.bar}>
+                    <Toolbar>
+                        <Typography variant="h6" style={style.title}>
+                            Product data
+                        </Typography>
+                        <ButtonGroup
+                            color="primary"
+                            aria-label="outlined primary button group"
+                        >
+                            <Button onClick={handleEditClick}>Edit</Button>
+                            <Button
+                                onClick={handleDeleteClick}
+                                color="secondary"
+                            >
+                                Delete
+                            </Button>
+                        </ButtonGroup>
+                    </Toolbar>
+                </AppBar>
+            </div>
+
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     <Paper>
                         <List dense={true}>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Id"
                                     secondary={product._id}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Price"
                                     secondary={
@@ -53,61 +89,61 @@ export default function ProductStaticItems({
                                     }
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Name"
                                     secondary={product.name}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Brand"
                                     secondary={product.brand}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Condition"
                                     secondary={product.condition}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Is for sale"
                                     secondary={product.isSale}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Merchant"
                                     secondary={product.merchant}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Shipping"
                                     secondary={product.shipping}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="EAN"
                                     secondary={product.ean}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Asins"
                                     secondary={product.asins}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Weight"
                                     secondary={product.weight}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Categories"
                                     secondary={product.categories}
@@ -121,7 +157,7 @@ export default function ProductStaticItems({
                     <Paper>
                         <List dense={true}>
                             {/* DATES */}
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Date added"
                                     secondary={_dateAdded}
@@ -149,41 +185,41 @@ export default function ProductStaticItems({
                             </ListItem>
                             {/* /DATES */}
 
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Manufacturer"
                                     secondary={product.manufacturer}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Manufacturer number"
                                     secondary={product.manufacturerNumber}
                                 />
                             </ListItem>
 
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Primary categories"
                                     secondary={product.primaryCategories}
                                 />
                             </ListItem>
 
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="UPC"
                                     secondary={product.upc}
                                 />
                             </ListItem>
 
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Keys"
                                     secondary={product.keys}
                                 />
                             </ListItem>
 
-                            <ListItem style={style}>
+                            <ListItem style={style.input}>
                                 <ListItemText
                                     primary="Source URLs"
                                     secondary={product.sourceURLs}
