@@ -3,6 +3,7 @@ import Header from './Header';
 import Profile from './Profile';
 import InfoPage from './InfoPage';
 import Product from './Product';
+import NewProduct from './NewProduct';
 import Products from './Products';
 import Footer from "./Footer";
 import Loading from "./Loading";
@@ -120,6 +121,7 @@ class App extends React.Component {
 
                     <div className="eiti-body-wrapper">
                         <Switch>
+                            
                             <Route
                                 exact
                                 path="/"
@@ -133,6 +135,14 @@ class App extends React.Component {
                                 path="/product/:id"
                                 render={(props) => (
                                     <Product client={client} {...props} />
+                                )}
+                            />
+
+                            <Route
+                                exact
+                                path="/add"
+                                render={(props) => (
+                                    <NewProduct client={client} {...props} />
                                 )}
                             />
 

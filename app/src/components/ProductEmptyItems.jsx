@@ -1,28 +1,18 @@
 import React from "react";
-import AlertDialog from './AlertDialog';
-import { convertStrToDate } from "../util";
+import AlertDialog from "./AlertDialog";
 import {
     List,
     ListItem,
     Grid,
-    ListItemText,
     TextField,
     Paper,
     AppBar,
-    Button,
     ButtonGroup,
     Toolbar,
     Typography,
 } from "@material-ui/core";
 
-export default function ProductDynamicItems({
-    product,
-    handleSaveClick,
-    handleCancelClick,
-}) {
-    
-    const _dateUpdated = convertStrToDate(product.dateUpdated);
-    const _dateAdded = convertStrToDate(product.dateAdded);
+export default function ProductEmptyItems({ handleSaveClick }) {
     const style = {
         root: {
             flexGrow: 1,
@@ -36,20 +26,22 @@ export default function ProductDynamicItems({
     };
 
     return (
-        <React.Fragment> 
-
+        <React.Fragment>
             <div style={style.root}>
                 <AppBar position="static" color="inherit" style={style.bar}>
                     <Toolbar>
                         <Typography variant="h6" style={style.title}>
-                            Edit Product
+                            Add Product
                         </Typography>
                         <ButtonGroup
                             color="primary"
                             aria-label="outlined primary button group"
                         >
-                            <Button onClick={handleCancelClick}>Cancel</Button>
-                            <AlertDialog text="Save" title="Are you sure you want to save changes?" handleAgree={handleSaveClick} />
+                            <AlertDialog
+                                text="Save"
+                                title="Are you sure you want to save changes?"
+                                handleAgree={handleSaveClick}
+                            />
                         </ButtonGroup>
                     </Toolbar>
                 </AppBar>
@@ -60,18 +52,22 @@ export default function ProductDynamicItems({
                     <Paper>
                         <List dense={true}>
                             <ListItem style={style}>
-                                <ListItemText
-                                    primary="Id"
-                                    secondary={product._id}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
                                 <TextField
                                     id="price-input"
                                     label="Price"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.price}
-                                    helperText={product.currency}
+                                    fullWidth
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+                            <ListItem style={style}>
+                                <TextField
+                                    id="currency-input"
+                                    label="Currency"
+                                    style={{ margin: 8 }}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -84,7 +80,6 @@ export default function ProductDynamicItems({
                                     id="name-input"
                                     label="Name"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.name}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -97,7 +92,6 @@ export default function ProductDynamicItems({
                                     id="brand-input"
                                     label="Brand"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.brand}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -110,7 +104,6 @@ export default function ProductDynamicItems({
                                     id="condition-input"
                                     label="Condition"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.condition}
                                     helperText="The condition of the product in cases where it is being sold at this price."
                                     fullWidth
                                     margin="normal"
@@ -124,7 +117,6 @@ export default function ProductDynamicItems({
                                     id="for-sale-input"
                                     label="Is for sale"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.isSale}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -138,7 +130,6 @@ export default function ProductDynamicItems({
                                     label="Merchant"
                                     helperText="The merchant and/or website selling at this price."
                                     style={{ margin: 8 }}
-                                    defaultValue={product.merchant}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -152,7 +143,6 @@ export default function ProductDynamicItems({
                                     label="Shipping"
                                     helperText="The shipping conditions associated with this price."
                                     style={{ margin: 8 }}
-                                    defaultValue={product.shipping}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -165,7 +155,6 @@ export default function ProductDynamicItems({
                                     id="ean-input"
                                     label="EAN"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.ean}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -178,7 +167,6 @@ export default function ProductDynamicItems({
                                     id="asins-input"
                                     label="Asins"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.isSale}
                                     helperText="A list of ASINs (Amazon identifiers) used for this product."
                                     fullWidth
                                     margin="normal"
@@ -192,7 +180,6 @@ export default function ProductDynamicItems({
                                     id="weight-input"
                                     label="Weight"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.weight}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -205,7 +192,6 @@ export default function ProductDynamicItems({
                                     id="categories-input"
                                     label="Categories"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.categories}
                                     helperText="A list of category keywords used for this product in many sources."
                                     fullWidth
                                     margin="normal"
@@ -227,7 +213,6 @@ export default function ProductDynamicItems({
                                     id="date-added-input"
                                     label="Date added"
                                     style={{ margin: 8 }}
-                                    defaultValue={_dateAdded}
                                     fullWidth
                                     margin="normal"
                                     helperText="The date this product was added as first to the product database."
@@ -241,7 +226,6 @@ export default function ProductDynamicItems({
                                     id="date-updated-input"
                                     label="Date updated"
                                     style={{ margin: 8 }}
-                                    defaultValue={_dateUpdated}
                                     fullWidth
                                     margin="normal"
                                     helperText="The most recent date this product was last updated or viewed by our system."
@@ -256,7 +240,6 @@ export default function ProductDynamicItems({
                                     id="manufacturer-input"
                                     label="Manufacturer"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.manufacturer}
                                     fullWidth
                                     margin="normal"
                                     helperText="The producer of this product.."
@@ -270,7 +253,6 @@ export default function ProductDynamicItems({
                                     id="manufacturer-number-input"
                                     label="Manufacturer number"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.manufacturerNumber}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -284,7 +266,6 @@ export default function ProductDynamicItems({
                                     id="primary-categories-input"
                                     label="Primary categories"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.primaryCategories}
                                     fullWidth
                                     helperText="A list of standardized categories to which this product belongs."
                                     margin="normal"
@@ -299,7 +280,6 @@ export default function ProductDynamicItems({
                                     id="upc-input"
                                     label="UPC"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.upc}
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{
@@ -313,7 +293,6 @@ export default function ProductDynamicItems({
                                     id="keys-input"
                                     label="Keys"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.keys}
                                     helperText="A list of Internal Datafiniti identifiers for this product."
                                     fullWidth
                                     margin="normal"
@@ -328,7 +307,6 @@ export default function ProductDynamicItems({
                                     id="urls-input"
                                     label="Source URLs"
                                     style={{ margin: 8 }}
-                                    defaultValue={product.sourceURLs}
                                     helperText="A list of URLs used to generate data for this product."
                                     fullWidth
                                     margin="normal"

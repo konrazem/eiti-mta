@@ -11,6 +11,7 @@ import {
 
 //ICONS
 import MenuIcon from "@material-ui/icons/Menu";
+import AddIcon from "@material-ui/icons/Add";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -100,6 +101,15 @@ const HeaderMenu = (props) => {
                     </StyledMenuItem>
                 </Link>
 
+                <Link to="/add">
+                    <StyledMenuItem>
+                        <ListItemIcon>
+                            <AddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Add product" />
+                    </StyledMenuItem>
+                </Link>
+
                 <Link to="/profile">
                     <StyledMenuItem>
                         <ListItemIcon>
@@ -108,6 +118,7 @@ const HeaderMenu = (props) => {
                         <ListItemText primary="Profile" />
                     </StyledMenuItem>
                 </Link>
+
 
                 <StyledMenuItem onClick={handleLogout}>
                     <ListItemIcon>

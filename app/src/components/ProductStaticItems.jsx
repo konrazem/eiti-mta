@@ -1,4 +1,5 @@
 import React from "react";
+import AlerDialog from './AlertDialog';
 import { convertStrToDate } from "../util";
 
 import {
@@ -60,12 +61,11 @@ export default function ProductStaticItems({
                             aria-label="outlined primary button group"
                         >
                             <Button onClick={handleEditClick}>Edit</Button>
-                            <Button
-                                onClick={handleDeleteClick}
-                                color="secondary"
-                            >
-                                Delete
-                            </Button>
+                            <AlerDialog
+                                text="Delete"
+                                title="Are you sure you want to delete this product?"
+                                handleAgree={handleDeleteClick}
+                             />
                         </ButtonGroup>
                     </Toolbar>
                 </AppBar>
