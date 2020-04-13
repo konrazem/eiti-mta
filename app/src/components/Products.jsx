@@ -1,8 +1,9 @@
 import React from "react";
-import { getArrOfArrsOfObjsVals } from "../util";
 import Loading from "./Loading";
-import MUIDataTable from "mui-datatables";
+import Settings from "./Settings";
 import { gql } from "apollo-boost";
+import MUIDataTable from "mui-datatables";
+import { Grid } from "@material-ui/core";
 
 class Products extends React.Component {
     /**
@@ -19,7 +20,6 @@ class Products extends React.Component {
             err: false,
         };
     }
-
 
     /**
      *
@@ -75,7 +75,7 @@ class Products extends React.Component {
                     .then((count) => {
                         this.setState({
                             res: products,
-                            count: count,
+                            count: count.data.count,
                         });
                     });
             })
@@ -91,8 +91,8 @@ class Products extends React.Component {
      * @memberof Products
      */
     render() {
-        const { loading, data, networkStatus, rates } = this.state.res;
-        const history = this.props.history;
+        // const { loading, data, networkStatus, rates } = this.state.res;
+        const { loading, data } = this.state.res;
 
         if (typeof loading === "undefined") {
             return <Loading text="Loading products..." />;
@@ -100,12 +100,15 @@ class Products extends React.Component {
 
         // we have data. Check if there is any product
         const products = data.products;
+        const history = this.props.history;
+        const skip = this.props.match.params.skip;
+        const limit = this.props.match.params.limit;
 
         /**
          * Table settings for MUI Datatable
          */
         let table = {
-            title: `Products`,
+            title: `Products (${limit})`,
             options: {
                 serverSide: false, // Enable remote data source! I do not want to rely on this.
                 pagination: true,
@@ -126,17 +129,18 @@ class Products extends React.Component {
                     // Callback function that triggers when row(s) are selected. DO NOT HAVE EFFECT WHEN selectableRowsOnClick is true
                     // rowMeta: { dataIndex: number, rowIndex: number }
                     // Get ID and navigate to product
-
-                    const ID = rowData[0];
-                    console.log("Selected ID: " + ID);
-                    history.push("/product/" + ID); // navigate to product page
+                    history.push("/product/" + rowData[0]); // navigate to product page
                 },
 
+                // customToolbar: function() {
+                //     // add extra elements to the Toobar and not replace it!
+                //     return <Settings skip={skip} limit={limit} />
+                // }
                 // customToolbarSelect: function() {
-                //     return <div><button>edit</button></div>
+                //     return <Button />
                 // }
             },
-            rows: [],
+            rows: Array.isArray(products) && products,
             // NOTE: That order must be same as in client.queries. If not then different labels for different data!
             columns: [
                 {
@@ -336,18 +340,20 @@ class Products extends React.Component {
                 },
             ],
         };
-
-        table.rows = Array.isArray(products)
-            ? getArrOfArrsOfObjsVals(products)
-            : [[]];
-
         return (
-            <MUIDataTable
-                title={table.title}
-                columns={table.columns}
-                options={table.options}
-                data={table.rows}
-            />
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={12}>
+                    <Settings skip={skip} limit={limit} />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                    <MUIDataTable
+                        title={table.title}
+                        columns={table.columns}
+                        options={table.options}
+                        data={table.rows}
+                    />
+                </Grid>
+            </Grid>
         );
     }
 }

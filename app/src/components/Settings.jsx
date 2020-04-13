@@ -1,107 +1,134 @@
-import React from 'react';
-import Loading from './Loading';
+import React, { useRef } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+    Grid,
+    Avatar,
+    Typography,
+    Paper,
+    Button,
+    TextField,
+} from "@material-ui/core/";
+import InfoIcon from "@material-ui/icons/Info";
 
-import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
-import { Button, TextField } from '@material-ui/core/';
-import { countQuery } from '../graphql/queries';
-
-
-import { Card, CardActions, CardHeader } from '@material-ui/core';
-
-const text = {
-  submit: "Submit",
-  records_title: "Select number of records out of:",
-}
-
-
-
-const useStyles = makeStyles(theme => ({
-  card: {
-    minWidth: 275,
-  },
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: "auto",
+    },
 }));
 
+export default function Settings({ skip, limit }) {
+    // const [values, setValues] = React.useState();
+    const classes = useStyles();
+    const TextFieldSkip = useRef(null);
+    const TextFieldLimit = useRef(null);
+    const handleSubmit = () => {
+        // get ref values
+        const skip = TextFieldSkip.current.getElementsByTagName("input")[0]
+            .value;
+        const limit = TextFieldLimit.current.getElementsByTagName("input")[0]
+            .value;
 
+        if (parseInt(skip) || skip === "0") {
+            // NOTE: if(0) === false
+            if (parseInt(limit)) {
+                // if limit === '0' do NOT navigate. Moreover do not use history as table component will not render!
+                const url = `/products/skip/${skip}/limit/${limit}`;
+                window.location = url;
+            }
+        }
+    };
 
-const Settings = props => {
-
-  const classes = useStyles();
-  const [values, setValues] = React.useState({
-    skip: 0, limit: 100
-  });
-  const { loading, error, data } = useQuery(countQuery);
-
-  if (loading) return <Loading />;
-  if (error) return `Error! ${error.message}`;
-
-  const handleSubmit = (event) => {
-    if (event) {
-      event.preventDefault();
-      // alert(`skip: ${values.skip} limit: ${values.limit}`)
-      props.setSettings(values);
-    }
-  }
-
-  //NOTE : no max limit for skip and limit
-  const handleChange = name => event => {
-    setValues({ ...values, [name]: (event.target.value < 0) ? 0 : event.target.value });
-  };
-
-  return (
-    <Card className={classes.card}>
-      <CardHeader title={text.records_title} subheader={data.count} />
-      <CardActions>
-
-
-        <form onSubmit={handleSubmit}>
-          <div className={classes.container}>
-
-            <TextField
-              id="outlined-number"
-              label="Start from:"
-              value={values.skip}
-              onChange={handleChange('skip')}
-              type="number"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-              variant="outlined"
-            />
-
-            <TextField
-              id="outlined-number"
-              label="End on:"
-              value={values.limit}
-              onChange={handleChange('limit')}
-              type="number"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-              variant="outlined"
-              placeholder="0"
-            />
-
-
-          </div>
-
-          <Button className={classes.button} color="primary" type="submit">
-            {text.submit}
-          </Button>
-
-        </form>
-
-
-
-      </CardActions>
-    </Card>
-
-  );
+    return (
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <Grid container spacing={4}>
+                    <Grid
+                        item
+                        container
+                        spacing={2}
+                        direction="row"
+                        justify="flex-start"
+                    >
+                      
+                        <Grid item>
+                          <Typography variant="h5">
+                            Information about fetching data
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="body1">
+                                There may be lots of records to fetch which can slow down application. That is why 200 records are downloaded by default. In order to fetch more or less products from the
+                                database plase change skip/limit values in URL
+                                or below. Skip is a value of how many products
+                                to omit in the database. Limit is a number of
+                                products to fetch from the database starting
+                                from skip value. For example if in database
+                                there are 1000 records and user set skip to 200
+                                and limit to 1000, then 800 records will be
+                                retrievd from the database.
+                            </Typography>
+                            <Typography variant="body1">
+                                For example if in database
+                                there are 1000 records and user set skip to 200
+                                and limit to 1000, then 800 records will be
+                                retrievd from the database.
+                            </Typography>
+                            <Typography variant="caption">
+                              *You can check current skip and limit values in URL, in the placeholders inputs or in the table below.
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        item
+                        container
+                        spacing={2}
+                        direction="row"
+                        justify="flex-end"
+                    >
+                        <Grid item>
+                            <TextField
+                                ref={TextFieldSkip}
+                                id="textfiled-skip"
+                                placeholder={skip}
+                                label="skip"
+                                type="number"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id="textfield-limit"
+                                ref={TextFieldLimit}
+                                label="limit"
+                                placeholder={limit}
+                                type="number"
+                                variant="outlined"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        item
+                        container
+                        spacing={2}
+                        direction="row"
+                        justify="flex-end"
+                    >
+                        <Grid item>
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={handleSubmit}
+                            >
+                                Submit
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
+    );
 }
-
-
-export default Settings;
