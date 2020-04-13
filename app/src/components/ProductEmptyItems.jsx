@@ -31,7 +31,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                 <AppBar position="static" color="inherit" style={style.bar}>
                     <Toolbar>
                         <Typography variant="h6" style={style.title}>
-                            Add Product
+                            Add new product
                         </Typography>
                         <ButtonGroup
                             color="primary"
@@ -39,7 +39,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                         >
                             <AlertDialog
                                 text="Save"
-                                title="Are you sure you want to save changes?"
+                                title="Are you sure you want to add this product?"
                                 handleAgree={handleSaveClick}
                             />
                         </ButtonGroup>
@@ -211,6 +211,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="date-added-input"
+                                    type="date"
                                     label="Date added"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -223,6 +224,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             </ListItem>
                             <ListItem>
                                 <TextField
+                                    type="date"
                                     id="date-updated-input"
                                     label="Date updated"
                                     style={{ margin: 8 }}

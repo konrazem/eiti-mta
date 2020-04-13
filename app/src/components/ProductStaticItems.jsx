@@ -1,6 +1,6 @@
 import React from "react";
 import AlerDialog from './AlertDialog';
-import { convertStrToDate } from "../util";
+import { getDateFromStr } from "../util";
 
 import {
     List,
@@ -30,8 +30,8 @@ export default function ProductStaticItems({
     handleDeleteClick,
     handleEditClick,
 }) {
-    const _dateUpdated = convertStrToDate(product.dateUpdated);
-    const _dateAdded = convertStrToDate(product.dateAdded);
+    const _dateUpdated = getDateFromStr(product.dateUpdated);
+    const _dateAdded = getDateFromStr(product.dateAdded);
 
     const style = {
         input: {

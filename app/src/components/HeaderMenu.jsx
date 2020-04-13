@@ -14,6 +14,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AddIcon from "@material-ui/icons/Add";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
+import PageviewIcon from "@material-ui/icons/Pageview";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 
@@ -52,6 +53,9 @@ const StyledMenuItem = withStyles((theme) => ({
                 color: theme.palette.common.white,
             },
         },
+        link: {
+
+        }
     },
 }))(MenuItem);
 
@@ -75,6 +79,14 @@ const HeaderMenu = (props) => {
     function handleLogout() {
         window.location = "/logout";
     }
+    const styles = {
+        link: {
+            textDecoration: 'none',
+            color: 'inherit'
+        }
+    };
+
+
     return (
         <div>
             <IconButton
@@ -92,16 +104,25 @@ const HeaderMenu = (props) => {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
             >
-                <Link to="/">
+                <Link to="/" style={styles.link}>
                     <StyledMenuItem>
                         <ListItemIcon>
                             <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </StyledMenuItem>
+                </Link>
+
+                <Link to="/products/skip/0/limit/200" style={styles.link}>
+                    <StyledMenuItem>
+                        <ListItemIcon>
+                            <PageviewIcon />
                         </ListItemIcon>
                         <ListItemText primary="Products" />
                     </StyledMenuItem>
                 </Link>
 
-                <Link to="/add">
+                <Link to="/add" style={styles.link}>
                     <StyledMenuItem>
                         <ListItemIcon>
                             <AddIcon />
@@ -110,7 +131,7 @@ const HeaderMenu = (props) => {
                     </StyledMenuItem>
                 </Link>
 
-                <Link to="/profile">
+                <Link to="/profile" style={styles.link}>
                     <StyledMenuItem>
                         <ListItemIcon>
                             <AccountCircle />
@@ -118,7 +139,6 @@ const HeaderMenu = (props) => {
                         <ListItemText primary="Profile" />
                     </StyledMenuItem>
                 </Link>
-
 
                 <StyledMenuItem onClick={handleLogout}>
                     <ListItemIcon>

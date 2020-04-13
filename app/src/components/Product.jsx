@@ -32,8 +32,7 @@ class Product extends React.Component {
      * @memberof Product
      */
     componentDidMount() {
-        const id = "AVpgMuGwLJeJML43KY_c";
-
+        const id = this.props.history.location.pathname.split("/")[2];
         // musisz pobrać id z linku!
         this.props.client
             .query({
@@ -106,7 +105,8 @@ class Product extends React.Component {
      * @memberof Product
      */
     render() {
-        const { loading, data, networkStatus, rates } = this.state.res;
+        // const { loading, data, networkStatus, rates } = this.state.res;
+        const { loading, data } = this.state.res;
 
         if (this.state.error) {
             return <InfoPage text="Error while fetching the product." />;

@@ -1,6 +1,6 @@
 import React from "react";
 import AlertDialog from './AlertDialog';
-import { convertStrToDate } from "../util";
+import { getDateFromStr } from "../util";
 import {
     List,
     ListItem,
@@ -21,8 +21,8 @@ export default function ProductDynamicItems({
     handleCancelClick,
 }) {
     
-    const _dateUpdated = convertStrToDate(product.dateUpdated);
-    const _dateAdded = convertStrToDate(product.dateAdded);
+    const _dateUpdated = getDateFromStr(product.dateUpdated);
+    const _dateAdded = getDateFromStr(product.dateAdded);
     const style = {
         root: {
             flexGrow: 1,
@@ -36,8 +36,7 @@ export default function ProductDynamicItems({
     };
 
     return (
-        <React.Fragment> 
-
+        <React.Fragment>
             <div style={style.root}>
                 <AppBar position="static" color="inherit" style={style.bar}>
                     <Toolbar>
@@ -49,7 +48,11 @@ export default function ProductDynamicItems({
                             aria-label="outlined primary button group"
                         >
                             <Button onClick={handleCancelClick}>Cancel</Button>
-                            <AlertDialog text="Save" title="Are you sure you want to save changes?" handleAgree={handleSaveClick} />
+                            <AlertDialog
+                                text="Save"
+                                title="Are you sure you want to save changes?"
+                                handleAgree={handleSaveClick}
+                            />
                         </ButtonGroup>
                     </Toolbar>
                 </AppBar>
@@ -223,6 +226,7 @@ export default function ProductDynamicItems({
                         <List dense={true}>
                             {/* DATES */}
                             <ListItem style={style}>
+                                {/* expect yyyy-MM-dd */}
                                 <TextField
                                     id="date-added-input"
                                     label="Date added"
@@ -230,6 +234,7 @@ export default function ProductDynamicItems({
                                     defaultValue={_dateAdded}
                                     fullWidth
                                     margin="normal"
+                                    type="date"
                                     helperText="The date this product was added as first to the product database."
                                     InputLabelProps={{
                                         shrink: true,
@@ -243,6 +248,7 @@ export default function ProductDynamicItems({
                                     style={{ margin: 8 }}
                                     defaultValue={_dateUpdated}
                                     fullWidth
+                                    type="date"
                                     margin="normal"
                                     helperText="The most recent date this product was last updated or viewed by our system."
                                     InputLabelProps={{

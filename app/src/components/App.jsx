@@ -1,10 +1,11 @@
 import React from "react";
-import Header from './Header';
-import Profile from './Profile';
-import InfoPage from './InfoPage';
-import Product from './Product';
-import NewProduct from './NewProduct';
-import Products from './Products';
+import Header from "./Header";
+import Profile from "./Profile";
+import InfoPage from "./InfoPage";
+import HomePage from "./HomePage";
+import Product from "./Product";
+import NewProduct from "./NewProduct";
+import Products from "./Products";
 import Footer from "./Footer";
 import Loading from "./Loading";
 
@@ -12,10 +13,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import ApolloClient from "apollo-boost";
 
-
-
-const HOST = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
-
+const HOST =
+    process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
 
 class App extends React.Component {
     /**
@@ -46,7 +45,7 @@ class App extends React.Component {
      */
 
     async fetchToken() {
-        return fetch(  HOST + "/token", {
+        return fetch(HOST + "/token", {
             method: "HEAD",
             headers: {
                 "X-Csrf-Token": "fetch",
@@ -63,37 +62,32 @@ class App extends React.Component {
      */
     async componentDidMount() {
         // for every request in the application you need to pass token in header
-        this.fetchToken().then((token) => {
+        this.fetchToken()
+            .then((token) => {
+                // create cache
+                const apolloCache = new InMemoryCache();
 
-            // create cache
-            const apolloCache = new InMemoryCache();
+                // create apollo client
+                const apolloClient = new ApolloClient({
+                    uri: HOST + "/api/v1/graphql",
+                    cache: apolloCache,
+                    // headers: {
+                    //     "Content-Type": "application/json",
+                    //     "X-Csrf-Token": token || "XXX",
+                    // },
+                });
 
-            // create apollo client
-            const apolloClient = new ApolloClient({
-                uri: HOST + "/api/v1/graphql",
-                cache: apolloCache,
-                // headers: {
-                //     "Content-Type": "application/json",
-                //     "X-Csrf-Token": token || "XXX",
-                // },
+                this.setState({
+                    client: apolloClient,
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+                this.setState({
+                    error: err + "",
+                });
             });
-            
-            this.setState({
-              client: apolloClient
-            });
-
- 
-        })
-        .catch(err => {
-            console.error(err);
-            this.setState({ 
-               error: err + ""
-             });
-
-
-        });
     }
-
 
     /**
      *
@@ -104,7 +98,7 @@ class App extends React.Component {
     render() {
         const { client, error } = this.state;
 
-        if(error) {
+        if (error) {
             return <InfoPage text="Server error while loading application." />;
         }
 
@@ -121,10 +115,10 @@ class App extends React.Component {
 
                     <div className="eiti-body-wrapper">
                         <Switch>
-                            
+                            <Route exact path="/" render={() => <HomePage />} />
                             <Route
                                 exact
-                                path="/"
+                                path="/products/skip/:skip/limit/:limit"
                                 render={(props) => (
                                     <Products client={client} {...props} />
                                 )}
@@ -152,7 +146,11 @@ class App extends React.Component {
                                 render={(props) => <Profile {...props} />}
                             />
 
-                            <Route render={() => <InfoPage text="Page not found." />} />
+                            <Route
+                                render={() => (
+                                    <InfoPage text="Page not found." />
+                                )}
+                            />
                         </Switch>
                     </div>
 

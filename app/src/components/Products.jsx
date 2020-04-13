@@ -1,4 +1,5 @@
 import React from "react";
+import { getArrOfArrsOfObjsVals } from "../util";
 import Loading from "./Loading";
 import MUIDataTable from "mui-datatables";
 import { gql } from "apollo-boost";
@@ -13,31 +14,12 @@ class Products extends React.Component {
         super(props);
 
         this.state = {
-            res: {},
+            res: {}, // res from graphql products query
+            count: 0, // how many products
             err: false,
         };
     }
 
-    /**
-     *
-     *
-     * @param {*} arr
-     * @returns
-     * @memberof Products
-     */
-    getData(arr) {
-        var res = [];
-
-        arr.map((obj, index) => {
-            if (typeof obj === "object") {
-                res.push(Object.values(obj));
-            } else {
-                res.push([]);
-            }
-        });
-
-        return res;
-    }
 
     /**
      *
@@ -46,14 +28,8 @@ class Products extends React.Component {
      */
     componentDidMount() {
         // we need to set Header to fetch Token first?
-        let limit = parseInt(this.props.count) || 200;
-        let skip = 0;
-
-        // // TODO: take this from URL?
-        // if (limit > 200) {
-        //     skip = 0;
-        //     limit = 200; // set
-        // }
+        const skip = this.props.match.params.skip;
+        const limit = this.props.match.params.limit;
 
         this.props.client
             .query({
@@ -86,8 +62,25 @@ class Products extends React.Component {
                     }
                 `,
             })
-            .then((res) => {
-                this.setState({ res });
+            .then((products) => {
+                this.props.client
+                    .query({
+                        query: gql`
+                            # Definition Schema language DSL
+                            {
+                                count
+                            }
+                        `,
+                    })
+                    .then((count) => {
+                        this.setState({
+                            res: products,
+                            count: count,
+                        });
+                    });
+            })
+            .catch((err) => {
+                this.setState({ err });
             });
     }
 
@@ -102,12 +95,11 @@ class Products extends React.Component {
         const history = this.props.history;
 
         if (typeof loading === "undefined") {
-            return <Loading text="Loading products..." />
+            return <Loading text="Loading products..." />;
         }
 
         // we have data. Check if there is any product
         const products = data.products;
-        let product = products[0];
 
         /**
          * Table settings for MUI Datatable
@@ -115,25 +107,29 @@ class Products extends React.Component {
         let table = {
             title: `Products`,
             options: {
-                serverSide: false, // Enable remote data source!! How to addapt to garhpql?
+                serverSide: false, // Enable remote data source! I do not want to rely on this.
                 pagination: true,
-                filter: false,
+                filter: false, // no filter as there are to much data
                 filterType: "dropdown", // if filter set to false this has no effect
 
                 rowsPerPage: 50,
-                rowsPerPageOptions: [10, 20, 50, 100],
+                rowsPerPageOptions: [10, 20, 50, 100, 400],
 
-                rowHover: false,
+                rowHover: true, // Enable/disable hover style over rows
                 responsive: "scroll", // responsive for mobile
-                selectableRowsOnClick: false,
-                selectableRows: "none",
+                selectableRowsOnClick: false, // most important. Only when false onRowClick is working!
+                caseSensitive: true, // Enable/disable case sensitivity for search
+                selectableRows: "none", // 'single', 'multiple'
+                disableToolbarSelect: false,
+                // onRowClick: function (rowData, rowMeta) {
                 onRowClick: function (rowData, rowMeta) {
+                    // Callback function that triggers when row(s) are selected. DO NOT HAVE EFFECT WHEN selectableRowsOnClick is true
                     // rowMeta: { dataIndex: number, rowIndex: number }
                     // Get ID and navigate to product
 
                     const ID = rowData[0];
                     console.log("Selected ID: " + ID);
-                    history.push("/product/" + ID);
+                    history.push("/product/" + ID); // navigate to product page
                 },
 
                 // customToolbarSelect: function() {
@@ -341,7 +337,9 @@ class Products extends React.Component {
             ],
         };
 
-        table.rows = Array.isArray(products) ? this.getData(products) : [[]];
+        table.rows = Array.isArray(products)
+            ? getArrOfArrsOfObjsVals(products)
+            : [[]];
 
         return (
             <MUIDataTable
