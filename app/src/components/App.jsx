@@ -66,15 +66,17 @@ class App extends React.Component {
             .then((token) => {
                 // create cache
                 const apolloCache = new InMemoryCache();
-
-                // create apollo client
+                console.log('token used: ' + token);
+                // create apollo client 
                 const apolloClient = new ApolloClient({
                     uri: HOST + "/api/v1/graphql",
+                    fetchOptions: {
+                        credentials: "include",
+                    },
                     cache: apolloCache,
-                    // headers: {
-                    //     "Content-Type": "application/json",
-                    //     "X-Csrf-Token": token || "XXX",
-                    // },
+                    headers: {
+                        'X-Csrf-Token': token
+                    }
                 });
 
                 this.setState({
@@ -99,7 +101,7 @@ class App extends React.Component {
         const { client, error } = this.state;
 
         if (error) {
-            return <InfoPage text="Server error while loading application." />;
+            return <InfoPage text="Error while loading application." />;
         }
 
         if (!client) {
