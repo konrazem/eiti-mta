@@ -33,8 +33,8 @@ router.get("/user", (req, res) => {
     res.status(200).json(info);
 });
 
-router.get("/product", (req, res) => {
-    const id = req.query.id;
+router.get("/product/:id", (req, res) => {
+    const id = req.params.id;
 
     Product.aggregate([
         group,

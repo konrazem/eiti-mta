@@ -20,20 +20,20 @@ const  AlertDialog = forwardRef( ({ text, title, token }, ref) => {
     const [open, setOpen] = React.useState(false);
     const [response, setResponse ] = React.useState(false); 
     
-    React.useEffect(() => { 
-        console.log(ref);
-        const data = getObjsFromRef(ref);
-        debugger;
-        createProduct(URL, data)
-            .then((res) => {
-                debugger;
-                setResponse(res);
-            })
-            .catch((err) => {
-                debugger;
-                setResponse(err);
-            });
-    });
+    // React.useEffect(() => { 
+    //     console.log(ref);
+    //     const data = getObjsFromRef(ref);
+    //     debugger;
+    //     createProduct(URL, data)
+    //         .then((res) => {
+    //             debugger;
+    //             setResponse(res);
+    //         })
+    //         .catch((err) => {
+    //             debugger;
+    //             setResponse(err);
+    //         });
+    // });
 
 
 
@@ -70,28 +70,30 @@ const  AlertDialog = forwardRef( ({ text, title, token }, ref) => {
     };
 
     function getObjsFromRef(ref) {
+        debugger;
         return {
-            price: getValueFromInputRef(ref.price),
-            asins: getValueFromInputRef(ref.asins),
-            brand: getValueFromInputRef(ref.brand),
-            categories: getValueFromInputRef(ref.categories),
-            dateAdded: getValueFromInputRef(ref.dateAdded),
-            dateUpdated: getValueFromInputRef(ref.dateUpdated),
-            ean: getValueFromInputRef(ref.ean),
-            imageURLs: getValueFromInputRef(ref.imageURLs),
-            keys: getValueFromInputRef(ref.keys),
-            manufacturer: getValueFromInputRef(ref.manufacturer),
-            manufacturerNumber: getValueFromInputRef(ref.manufacturerNumber),
-            name: getValueFromInputRef(ref.name),
-            primaryCategories: getValueFromInputRef(ref.primaryCategories),
-            sourceURLs: getValueFromInputRef(ref.sourceURLs),
-            upc: getValueFromInputRef(ref.upc),
-            weight: getValueFromInputRef(ref.weight),
+            price: getValueFromInputRef(ref.price) || "",
+            asins: getValueFromInputRef(ref.asins) || "",
+            brand: getValueFromInputRef(ref.brand) || "",
+            categories: getValueFromInputRef(ref.categories) || "",
+            dateAdded: getValueFromInputRef(ref.dateAdded || ""),
+            dateUpdated: getValueFromInputRef(ref.dateUpdated) || "",
+            ean: getValueFromInputRef(ref.ean) || "",
+            imageURLs: getValueFromInputRef(ref.imageURLs) || "",
+            keys: getValueFromInputRef(ref.keys) || "",
+            manufacturer: getValueFromInputRef(ref.manufacturer) || "",
+            manufacturerNumber: getValueFromInputRef(ref.manufacturerNumber) || "",
+            name: getValueFromInputRef(ref.name) || "",
+            primaryCategories: getValueFromInputRef(ref.primaryCategories) || "",
+            sourceURLs: getValueFromInputRef(ref.sourceURLs) || "",
+            upc: getValueFromInputRef(ref.upc) || "",
+            weight: getValueFromInputRef(ref.weight) || "",
         };
     };
 
     const handleAgree = () => {
-
+        console.log(getObjsFromRef(ref));
+        
     };
 
     return (

@@ -1,7 +1,6 @@
 import React from "react";
 import Loading from "./Loading";
 import InfoPage from "./InfoPage";
-import { gql } from "apollo-boost";
 import ProductStaticItems from "./ProductStaticItems";
 import ProductDynamicItems from "./ProductDynamicItems";
 
@@ -10,69 +9,24 @@ import ProductDynamicItems from "./ProductDynamicItems";
  * @extends {React.Component}
  * @description
  */
-class Product extends React.Component {
-    /**
-     *Creates an instance of Products.
-     * @param {*} props
-     * @memberof Product
-     */
+class Product extends React.Component { 
+
     constructor(props) {
         super(props);
 
         this.state = {
-            id: "",
-            res: {}, // loaded is in res
-            error: false,
+            res: null,
+            error: null, 
             editMode: false,
         };
     }
 
-    /**
-     * @name componentDidMount
-     * @memberof Product
-     */
     componentDidMount() {
-        const id = this.props.history.location.pathname.split("/")[2];
-        // musisz pobrać id z linku!
-        this.props.client
-            .query({
-                query: gql`
-                    # Definition Schema language DSL. 
-                    # You need "id" if not String then it is hard to detect this problem.
-                    {
-                        product(id: "${id}") {
-                            _id
-                            name
-                            price
-                            currency
-                            brand
-                            condition
-                            isSale
-                            merchant
-                            shipping
-                            ean
-                            asins
-                            weight
-                            categories
-                            dateAdded
-                            dateUpdated
-                            manufacturer
-                            manufacturerNumber
-                            primaryCategories
-                            upc
-                            keys
-                            sourceURLs
-                        }
-                    }
-                `,
-            })
-            .then((res) => {
-                this.setState({ id, res });
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({ id, error });
-            });
+        const idInUrl = this.props.history.location.pathname.split("/")[2];
+        fetch("http://localhost:5000/product/" + idInUrl)
+            .then((res) => res.json())
+            .then((data) => this.setState({ data }))
+            .catch((error) => this.setState({ error }));
     }
 
     handleEditClick() {
@@ -97,22 +51,21 @@ class Product extends React.Component {
 
     handleSaveClick() {
         console.log("handle save");
-    }
+    } 
 
-    /**
-     * @name render
-     * @returns
-     * @memberof Product
-     */
+
     render() {
-        // const { loading, data, networkStatus, rates } = this.state.res;
-        const { loading, data } = this.state.res;
+        // const { loading, data, prod, networkStatus, rates } = this.state.res;
+        // const { loading, data } = this.state.res;
+        // console.log("networkStatus: ", networkStatus);
+        const { data, error } = this.state;
 
-        if (this.state.error) {
+        if (error) {
             return <InfoPage text="Error while fetching the product." />;
         }
-
-        if (typeof loading === "undefined") {
+        
+        if(!data) {
+            // need to check timeout
             return (
                 <Loading
                     text="Loading products' data..."
@@ -120,40 +73,47 @@ class Product extends React.Component {
                 />
             );
         }
-
-        if (!data.product.length) {
+ 
+        if (!data.length) {
             return <InfoPage text="Product was not found." />;
         }
 
-        // Here we have product to work with. We can be in the edit mode or not.
-        const product = data.product[0];
 
-        let items = null;
+        const product = data[0];
 
         if (this.state.editMode) {
             // if edit mode it on
-            items = (
-                <ProductDynamicItems
-                    product={product}
-                    handleCancelClick={this.handleCancelClick.bind(this)}
-                    handleSaveClick={this.handleSaveClick}
-                />
+            return (
+                <div
+                    style={{
+                        flexGrow: 1,
+                        padding: 10,
+                    }}
+                >
+                    <ProductDynamicItems
+                        product={product}
+                        handleCancelClick={this.handleCancelClick.bind(this)}
+                        handleSaveClick={this.handleSaveClick}
+                    />
+                </div>
             );
         } else {
-            items = (
-                <ProductStaticItems
-                    product={product}
-                    handleEditClick={this.handleEditClick.bind(this)}
-                    handleDeleteClick={this.handleDeleteClick}
-                />
+            return (
+                <div
+                    style={{
+                        flexGrow: 1,
+                        padding: 10,
+                    }}
+                >
+                    <ProductStaticItems
+                        product={product}
+                        handleEditClick={this.handleEditClick.bind(this)}
+                        handleDeleteClick={this.handleDeleteClick}
+                    />
+                </div>
             );
         }
 
-        const style = {
-            flexGrow: 1,
-            padding: 10,
-        };
-        return <div style={style}> {items} </div>;
     }
 }
 

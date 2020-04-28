@@ -69,7 +69,7 @@ class App extends React.Component {
                 console.log('token used: ' + token);
                 // create apollo client 
                 const apolloClient = new ApolloClient({
-                    uri: HOST + "/api/v1/graphql",
+                    uri: HOST + "/graphql",
                     fetchOptions: {
                         credentials: "include",
                     },

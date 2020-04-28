@@ -1,6 +1,6 @@
 import React from "react";
-import AlertDialog from './AlertDialog';
-import { getDateFromStr } from "../util";
+import AlertDialog from "./AlertDialog";
+// import { getDateFromStr } from "../util";
 import {
     List,
     ListItem,
@@ -15,14 +15,177 @@ import {
     Typography,
 } from "@material-ui/core";
 
+
+
 export default function ProductDynamicItems({
     product,
     handleSaveClick,
     handleCancelClick,
 }) {
-    
+
+    function getDateFromStr(str) {
+        var def = "0000-00-00";
+        if (!str) {
+            return def;
+        }
+
+        const date = new Date(str.toString()); // try to conver to Date
+        if (date.toString() === "Invalid Date") {
+            return def;
+        }
+
+        // we have valid date
+        // we need to return format yyyy-MM-dd
+        return date.toISOString().split("T")[0];
+    }
+
+    function genConfig(product = {}) {
+        return [
+            {
+                type: "text",
+                id: "name-input",
+                label: "Name",
+                defaultValue: product.name,
+                helperText: "Product name",
+            },
+            {
+                type: "text",
+                id: "brand-input",
+                label: "Brand",
+                defaultValue: product.brand,
+                helperText: "Product brand",
+            },
+            {
+                type: "text",
+                id: "condition-input",
+                label: "Condition",
+                defaultValue: product.condition,
+                helperText:
+                    "The condition of the product in cases where it is being sold at this price",
+            },
+            {
+                type: "text",
+                id: "for-sale-input",
+                label: "Is for sale",
+                defaultValue: product.isSale,
+                helperText: "If product is for sale",
+            },
+            {
+                type: "text",
+                id: "merchant-input",
+                label: "Merchant",
+                defaultValue: product.merchant,
+                helperText:
+                    "The merchant and/or website selling at this price.",
+            },
+            {
+                type: "text",
+                id: "shipping-input",
+                label: "Shipping",
+                defaultValue: product.shipping,
+                helperText:
+                    "The shipping conditions associated with this price.",
+            },
+            {
+                type: "text",
+                id: "ean-input",
+                label: "EAN",
+                defaultValue: product.ean,
+                helperText: "",
+            },
+
+            {
+                type: "text",
+                id: "asins-input",
+                label: "Asins",
+                defaultValue: product.asins,
+                helperText:
+                    "A list of ASINs (Amazon identifiers) used for this product.",
+            },
+            {
+                type: "text",
+                id: "weight-input",
+                label: "Weight",
+                defaultValue: product.weight,
+                helperText: "",
+            },
+            {
+                type: "text",
+                id: "categories-input",
+                label: "Categories",
+                defaultValue: product.categories,
+                helperText:
+                    "A list of category keywords used for this product in many sources.",
+            },
+            {
+                type: "date",
+                id: "date-added-input",
+                label: "Date added",
+                defaultValue: getDateFromStr(product.dateAdded),
+                helperText:
+                    "The date this product was added as first to the product database.",
+            },
+            {
+                type: "date",
+                id: "date-updated-input",
+                label: "Date updated",
+                defaultValue: getDateFromStr(product.dateUpdated),
+                helperText:
+                    "The most recent date this product was last updated or viewed by our system.",
+            },
+            {
+                type: "text",
+                id: "manufacturer-input",
+                label: "Manufacturer",
+                defaultValue: product.manufacturer,
+                helperText: "The producer of this product.",
+            },
+            {
+                type: "text",
+                id: "manufacturer-number-input",
+                label: "Manufacturer number",
+                defaultValue: product.manufacturerNumber,
+                helperText: "",
+            },
+            {
+                type: "text",
+                id: "primary-categories-input",
+                label: "Primary categories",
+                defaultValue: product.primaryCategories,
+                helperText:
+                    "A list of standardized categories to which this product belongs.",
+                margin: "normal.",
+            },
+            {
+                type: "text",
+                id: "upc-input",
+                label: "UPC",
+                defaultValue: product.upc,
+                helperText: "",
+            },
+            {
+                type: "text",
+                id: "keys-input",
+                label: "Keys",
+                defaultValue: product.keys,
+                helperText:
+                    "A list of Internal Datafiniti identifiers for this product.",
+            },
+            {
+                type: "url",
+                id: "urls-input",
+                label: "Source URLs",
+                defaultValue: product.sourceURLs,
+                helperText:
+                    "A list of URLs used to generate data for this product.",
+            },
+        ];
+    }
+
+
     const _dateUpdated = getDateFromStr(product.dateUpdated);
     const _dateAdded = getDateFromStr(product.dateAdded);
+    const config = genConfig(product);
     const style = {
         root: {
             flexGrow: 1,
@@ -68,281 +231,25 @@ export default function ProductDynamicItems({
                                     secondary={product._id}
                                 />
                             </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="price-input"
-                                    label="Price"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.price}
-                                    helperText={product.currency}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="name-input"
-                                    label="Name"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.name}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="brand-input"
-                                    label="Brand"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.brand}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="condition-input"
-                                    label="Condition"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.condition}
-                                    helperText="The condition of the product in cases where it is being sold at this price."
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="for-sale-input"
-                                    label="Is for sale"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.isSale}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="merchant-input"
-                                    label="Merchant"
-                                    helperText="The merchant and/or website selling at this price."
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.merchant}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="shipping-input"
-                                    label="Shipping"
-                                    helperText="The shipping conditions associated with this price."
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.shipping}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="ean-input"
-                                    label="EAN"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.ean}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="asins-input"
-                                    label="Asins"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.isSale}
-                                    helperText="A list of ASINs (Amazon identifiers) used for this product."
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="weight-input"
-                                    label="Weight"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.weight}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="categories-input"
-                                    label="Categories"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.categories}
-                                    helperText="A list of category keywords used for this product in many sources."
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                        </List>
-                    </Paper>
-                </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <Paper>
-                        <List dense={true}>
-                            {/* DATES */}
-                            <ListItem style={style}>
-                                {/* expect yyyy-MM-dd */}
-                                <TextField
-                                    id="date-added-input"
-                                    label="Date added"
-                                    style={{ margin: 8 }}
-                                    defaultValue={_dateAdded}
-                                    fullWidth
-                                    margin="normal"
-                                    type="date"
-                                    helperText="The date this product was added as first to the product database."
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <TextField
-                                    id="date-updated-input"
-                                    label="Date updated"
-                                    style={{ margin: 8 }}
-                                    defaultValue={_dateUpdated}
-                                    fullWidth
-                                    type="date"
-                                    margin="normal"
-                                    helperText="The most recent date this product was last updated or viewed by our system."
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-
-                            <ListItem style={style}>
-                                <TextField
-                                    id="manufacturer-input"
-                                    label="Manufacturer"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.manufacturer}
-                                    fullWidth
-                                    margin="normal"
-                                    helperText="The producer of this product.."
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-                            <ListItem style={style}>
-                                <TextField
-                                    id="manufacturer-number-input"
-                                    label="Manufacturer number"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.manufacturerNumber}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-
-                            <ListItem style={style}>
-                                <TextField
-                                    id="primary-categories-input"
-                                    label="Primary categories"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.primaryCategories}
-                                    fullWidth
-                                    helperText="A list of standardized categories to which this product belongs."
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-
-                            <ListItem style={style}>
-                                <TextField
-                                    id="upc-input"
-                                    label="UPC"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.upc}
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-
-                            <ListItem style={style}>
-                                <TextField
-                                    id="keys-input"
-                                    label="Keys"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.keys}
-                                    helperText="A list of Internal Datafiniti identifiers for this product."
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
-
-                            <ListItem style={style}>
-                                <TextField
-                                    id="urls-input"
-                                    label="Source URLs"
-                                    style={{ margin: 8 }}
-                                    defaultValue={product.sourceURLs}
-                                    helperText="A list of URLs used to generate data for this product."
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </ListItem>
+                            {config.map((prod, index) => {
+                                return (
+                                    <ListItem
+                                        style={style}
+                                        key={"key-" + index + "-" + prod.id}
+                                    >
+                                        <MyTextField
+                                            type={prod.type}
+                                            id={prod.id}
+                                            label={prod.label}
+                                            defaultValue={prod.defaultValue}
+                                            helperText={product.helperText}
+                                            disabled={false}
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                                 
                         </List>
                     </Paper>
                 </Grid>
@@ -350,3 +257,29 @@ export default function ProductDynamicItems({
         </React.Fragment>
     );
 }
+
+const MyTextField = ({
+    id,
+    label,
+    defaultValue,
+    helperText,
+    type,
+    disabled,
+}) => {
+    return (
+        <TextField
+            id={id}
+            label={label}
+            style={{ margin: 8 }}
+            defaultValue={defaultValue}
+            helperText={helperText}
+            fullWidth
+            disabled={disabled}
+            margin="normal"
+            type={type}
+            InputLabelProps={{
+                shrink: true,
+            }}
+        />
+    );
+};
