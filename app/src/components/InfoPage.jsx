@@ -5,7 +5,7 @@ import Error from "@material-ui/icons/Error";
 
 export default function InfoPage({ text }) {
     return (
-        <div>
+        <div style={{ paddingTop: 50 }}>
             <Box component="span" m={1} display="flex" justifyContent="center">
                 <Avatar>
                     <Error />

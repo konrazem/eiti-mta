@@ -101,7 +101,7 @@ class App extends React.Component {
         const { client, error } = this.state;
 
         if (error) {
-            return <InfoPage text="Error while loading application." />;
+            return <InfoPage text="Error while loading application. Please check if server is running." />;
         }
 
         if (!client) {

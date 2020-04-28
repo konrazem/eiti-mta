@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import AlertDialog from "./AlertDialog";
 import {
     List,
@@ -24,6 +24,30 @@ export default function ProductEmptyItems({ handleSaveClick }) {
             boxShadow: "none",
         },
     };
+    const handleClick = (data) => {
+        // get text fields
+        debugger;
+    };
+
+
+    const input = {
+        price: useRef(null), 
+        asins: useRef(null),
+        brand: useRef(null),
+        categories: useRef(null),
+        dateAdded: useRef(null),
+        dateUpdated: useRef(null),
+        ean: useRef(null),
+        imageURLs: useRef(null),
+        keys: useRef(null),
+        manufacturer: useRef(null),
+        manufacturerNumber: useRef(null),
+        name: useRef(null),
+        primaryCategories: useRef(null),
+        sourceURLs: useRef(null),
+        upc: useRef(null),
+        weight: useRef(null)
+    };
 
     return (
         <React.Fragment>
@@ -40,7 +64,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <AlertDialog
                                 text="Save"
                                 title="Are you sure you want to add this product?"
-                                handleAgree={handleSaveClick}
+                                ref={input}
                             />
                         </ButtonGroup>
                     </Toolbar>
@@ -54,6 +78,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="price-input"
+                                    ref={input.price}
                                     label="Price"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -66,6 +91,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="currency-input"
+                                    ref={input.currency}
                                     label="Currency"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -78,6 +104,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="name-input"
+                                    ref={input.name}
                                     label="Name"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -90,6 +117,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="brand-input"
+                                    ref={input.brand}
                                     label="Brand"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -102,6 +130,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="condition-input"
+                                    ref={input.condition}
                                     label="Condition"
                                     style={{ margin: 8 }}
                                     helperText="The condition of the product in cases where it is being sold at this price."
@@ -115,6 +144,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="for-sale-input"
+                                    ref={input.forSale}
                                     label="Is for sale"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -127,6 +157,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="merchant-input"
+                                    ref={input.merchant}
                                     label="Merchant"
                                     helperText="The merchant and/or website selling at this price."
                                     style={{ margin: 8 }}
@@ -140,6 +171,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="shipping-input"
+                                    ref={input.shipping}
                                     label="Shipping"
                                     helperText="The shipping conditions associated with this price."
                                     style={{ margin: 8 }}
@@ -153,6 +185,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="ean-input"
+                                    ref={input.ean}
                                     label="EAN"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -165,6 +198,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="asins-input"
+                                    ref={input.asins}
                                     label="Asins"
                                     style={{ margin: 8 }}
                                     helperText="A list of ASINs (Amazon identifiers) used for this product."
@@ -178,6 +212,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="weight-input"
+                                    ref={input.weight}
                                     label="Weight"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -190,6 +225,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="categories-input"
+                                    ref={input.categories}
                                     label="Categories"
                                     style={{ margin: 8 }}
                                     helperText="A list of category keywords used for this product in many sources."
@@ -211,6 +247,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="date-added-input"
+                                    ref={input.dateAdded}
                                     type="date"
                                     label="Date added"
                                     style={{ margin: 8 }}
@@ -226,6 +263,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                                 <TextField
                                     type="date"
                                     id="date-updated-input"
+                                    ref={input.dateUpdated}
                                     label="Date updated"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -240,6 +278,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="manufacturer-input"
+                                    ref={input.manufacturer}
                                     label="Manufacturer"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -253,6 +292,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="manufacturer-number-input"
+                                    ref={input.manufacturerNumber}
                                     label="Manufacturer number"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -266,6 +306,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="primary-categories-input"
+                                    ref={input.primaryCategories}
                                     label="Primary categories"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -280,6 +321,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="upc-input"
+                                    ref={input.upc}
                                     label="UPC"
                                     style={{ margin: 8 }}
                                     fullWidth
@@ -293,6 +335,7 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="keys-input"
+                                    ref={input.keys}
                                     label="Keys"
                                     style={{ margin: 8 }}
                                     helperText="A list of Internal Datafiniti identifiers for this product."
@@ -307,9 +350,25 @@ export default function ProductEmptyItems({ handleSaveClick }) {
                             <ListItem style={style}>
                                 <TextField
                                     id="urls-input"
+                                    ref={input.sourceURLs}
                                     label="Source URLs"
                                     style={{ margin: 8 }}
                                     helperText="A list of URLs used to generate data for this product."
+                                    fullWidth
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </ListItem>
+
+                            <ListItem style={style}>
+                                <TextField
+                                    id="imageURLs-input"
+                                    ref={input.imageURLs}
+                                    label="Images URLs"
+                                    style={{ margin: 8 }}
+                                    helperText="A list of product images URLs."
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{

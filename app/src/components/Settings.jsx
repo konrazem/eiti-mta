@@ -27,10 +27,16 @@ export default function Settings({ skip, limit }) {
     const TextFieldLimit = useRef(null);
     const handleSubmit = () => {
         // get ref values
-        const skip = TextFieldSkip.current.getElementsByTagName("input")[0]
-            .value;
-        const limit = TextFieldLimit.current.getElementsByTagName("input")[0]
-            .value;
+        let skip = "0";
+        let limit = "200";
+        if (
+            TextFieldSkip.current.getElementsByTagName("input") &&
+            TextFieldLimit.current.getElementsByTagName("input")
+        ) {
+
+            skip = TextFieldSkip.current.getElementsByTagName("input")[0].value;
+            limit = TextFieldLimit.current.getElementsByTagName("input")[0].value;
+        }
 
         if (parseInt(skip) || skip === "0") {
             // NOTE: if(0) === false

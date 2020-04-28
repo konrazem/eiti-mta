@@ -1,25 +1,24 @@
-/**
- * @author kgrzyb
- * @copyright Politechnika Warszawska 2020
- *
- * Detect environment. If 'prod' use xsuaa service.
- * Use cors only for requests to the database with given whitelist!
- */
-
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
-const Products = require("./mongoose/models/Products");
 const products = require("./resources/products.json"); // for local testing without database
-const mongoose = require("mongoose");
 const path = require("path");
-const schema = require("./graphql/schema");
-const root = require("./graphql/root");
 const xsenv = require("@sap/xsenv");
 const xssec = require("@sap/xssec");
 const passport = require("passport"); // to use JWTStrategy a plugin to authenticate requests
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
+/**
+ * Mongoose
+ */
+const mongoose = require("mongoose");
+const Products = require("./mongoose/Product.model");
 const { group } = require("./mongoose/aggregation");
+/**
+ * GraphQl
+ */
+const schema = require("./graphql/schema");
+const root = require("./graphql/root");
 
 require("dotenv").config(); // to load environment vars from .env file like DATABASE_URL
 
@@ -61,18 +60,28 @@ app.use(cors(corsOptions));
 // *******************************
 // MONGO
 // *******************************
+// mongoose.connect(DATABASE_URL, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     socketTimeoutMS: 0,
+//     keepAlive: true,
+// });
 mongoose.connect(DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     socketTimeoutMS: 0,
     keepAlive: true,
+}, (err) => {
+    if(!err) {
+        console.log('--- MONGO CONNECTED ---');
+    }
 });
 
 //check connection
-const conn = mongoose.connection;
-conn.on("error", (err) => console.log(err)); // check if URL founded
-conn.on("disconnected", () => console.log("Mongo Disconnected :("));
-conn.on("connected", () => console.log("Mongo Connected :)"));
+// const conn = mongoose.connection;
+// conn.on("error", (err) => console.log(err)); // check if URL founded
+// conn.on("disconnected", () => console.log("Mongo Disconnected :("));
+// conn.on("connected", () => console.log("Mongo Connected :)"));
 
 // *******************************
 // AUTH
@@ -222,4 +231,4 @@ app.use(
     })
 );
 
-app.listen(PORT, () => console.log(`eiti-router listen on port ${PORT}`));
+app.listen(PORT, () => console.log(`--- EXPRESS SERVER RUN ON PORT: ${PORT} ---`));

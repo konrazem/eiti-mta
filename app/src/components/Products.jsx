@@ -92,8 +92,10 @@ class Products extends React.Component {
      */
     render() {
         // const { loading, data, networkStatus, rates } = this.state.res;
-        const { loading, data } = this.state.res;
-
+        const { loading, data, networkStatus, rates } = this.state.res;
+        console.log('networkStatus: ', networkStatus);
+        console.log('rates: ', rates);
+        
         if (typeof loading === "undefined") {
             return <Loading text="Loading products..." />;
         }
@@ -103,12 +105,12 @@ class Products extends React.Component {
         const history = this.props.history;
         const skip = this.props.match.params.skip;
         const limit = this.props.match.params.limit;
-
+        const count = this.state.count
         /**
          * Table settings for MUI Datatable
          */
         let table = {
-            title: `Products (${limit})`,
+            title: `Products (${limit}/${count})`,
             options: {
                 serverSide: false, // Enable remote data source! I do not want to rely on this.
                 pagination: true,

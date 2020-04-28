@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Loading from "./Loading";
 import InfoPage from "./InfoPage";
 import { gql } from "apollo-boost";
@@ -14,13 +14,18 @@ class NewProduct extends React.Component {
         super(props);
 
         this.state = {
-            res: {}, // graphql result that contains loaded info
+            res: {},
             error: false,
+            loading: false
         };
     }
+    
+
 
     handleSaveClick() {
         console.log("handle save");
+        // get product input fields
+
     }
 
     render() {
@@ -28,11 +33,12 @@ class NewProduct extends React.Component {
             flexGrow: 1,
             padding: 10,
         };
+ 
 
         return (
             <div style={style}>
                 <ProductEmptyItems
-                    handleSaveClick={this.handleSaveClick}
+                    handleSaveClick={this.handleSaveClick} 
                 />
             </div>
         );
