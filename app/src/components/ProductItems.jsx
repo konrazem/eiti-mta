@@ -1,28 +1,19 @@
 import React from "react";
-import AlertDialog from "./AlertDialog";
-// import { getDateFromStr } from "../util";
 import {
     List,
     ListItem,
     Grid,
     ListItemText,
     TextField,
-    Paper,
-    AppBar,
-    Button,
-    ButtonGroup,
-    Toolbar,
-    Typography,
+    Paper
 } from "@material-ui/core";
 
-
-
-export default function ProductDynamicItems({
+export default function ProductItems({
     product,
+    disabled,
     handleSaveClick,
     handleCancelClick,
 }) {
-
     function getDateFromStr(str) {
         var def = "0000-00-00";
         if (!str) {
@@ -196,7 +187,7 @@ export default function ProductDynamicItems({
     };
 
     return (
-        <React.Fragment> 
+        <React.Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     <Paper>
@@ -207,25 +198,21 @@ export default function ProductDynamicItems({
                                     secondary={product._id}
                                 />
                             </ListItem>
-
                             {config.map((prod, index) => {
                                 return (
-                                    <ListItem
-                                        style={style}
-                                        key={"key-" + index + "-" + prod.id}
-                                    >
-                                        <MyTextField
+                                    <ListItem style={style} key={prod.id}>
+                                        <ProductItem
                                             type={prod.type}
+                                            s
                                             id={prod.id}
                                             label={prod.label}
                                             defaultValue={prod.defaultValue}
                                             helperText={product.helperText}
-                                            disabled={false}
+                                            disabled={disabled}
                                         />
                                     </ListItem>
                                 );
                             })}
-                                 
                         </List>
                     </Paper>
                 </Grid>
@@ -234,7 +221,7 @@ export default function ProductDynamicItems({
     );
 }
 
-const MyTextField = ({
+const ProductItem = ({
     id,
     label,
     defaultValue,
@@ -242,12 +229,20 @@ const MyTextField = ({
     type,
     disabled,
 }) => {
+    const [val, setVal] = React.useState(defaultValue);
+
+    const handleChange = e => {
+        e.preventDefault();
+        setVal(e.target.value);
+    }
+
     return (
         <TextField
             id={id}
             label={label}
             style={{ margin: 8 }}
-            defaultValue={defaultValue}
+            defaultValue={val}
+            onChange={handleChange}
             helperText={helperText}
             fullWidth
             disabled={disabled}

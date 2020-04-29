@@ -1,23 +1,23 @@
 import React from "react";
 import Loading from "./Loading";
 import InfoPage from "./InfoPage";
-import ProductStaticItems from "./ProductStaticItems";
-import ProductDynamicItems from "./ProductDynamicItems";
+import ProductItems from "./ProductItems";
+import ProductToolbarDelete from "./ProductToolbarDelete";
+
 
 /**
  * @class Product
  * @extends {React.Component}
  * @description
  */
-class Product extends React.Component { 
-
+class Product extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             res: null,
-            error: null, 
-            editMode: false,
+            error: null,
+            disabled: true, // not edit mode on init
         };
     }
 
@@ -31,9 +31,10 @@ class Product extends React.Component {
 
     handleEditClick() {
         // turn on editMode
-        console.log("turn on edit mode");
+        console.log(this.state.disabled);
+        
         this.setState({
-            editMode: true,
+            disabled: !this.state.disabled,
         });
     }
 
@@ -51,20 +52,19 @@ class Product extends React.Component {
 
     handleSaveClick() {
         console.log("handle save");
-    } 
-
+    }
 
     render() {
         // const { loading, data, prod, networkStatus, rates } = this.state.res;
         // const { loading, data } = this.state.res;
         // console.log("networkStatus: ", networkStatus);
-        const { data, error } = this.state;
+        const { data, error, disabled } = this.state;
 
         if (error) {
             return <InfoPage text="Error while fetching the product." />;
         }
-        
-        if(!data) {
+
+        if (!data) {
             // need to check timeout
             return (
                 <Loading
@@ -73,47 +73,31 @@ class Product extends React.Component {
                 />
             );
         }
- 
+
         if (!data.length) {
             return <InfoPage text="Product was not found." />;
         }
 
-
-        const product = data[0];
-
-        if (this.state.editMode) {
-            // if edit mode it on
-            return (
-                <div
-                    style={{
-                        flexGrow: 1,
-                        padding: 10,
-                    }}
-                >
-                    <ProductDynamicItems
-                        product={product}
-                        handleCancelClick={this.handleCancelClick.bind(this)}
-                        handleSaveClick={this.handleSaveClick}
-                    />
-                </div>
-            );
-        } else {
-            return (
-                <div
-                    style={{
-                        flexGrow: 1,
-                        padding: 10,
-                    }}
-                >
-                    <ProductStaticItems
-                        product={product}
-                        handleEditClick={this.handleEditClick.bind(this)}
-                        handleDeleteClick={this.handleDeleteClick}
-                    />
-                </div>
-            );
-        }
-
+        const style = {
+            root: {
+                flexGrow: 1,
+                padding: 10,
+            }
+        };
+        return (
+            <div style={style.root}>
+                <ProductToolbarDelete
+                    title="Prduct data"
+                    btnText
+                    handleEditClick={this.handleEditClick.bind(this)}
+                    handleDeleteClick={this.handleDeleteClick}
+                />
+                <ProductItems
+                    disabled={disabled}
+                    product={data[0]}
+                />
+            </div>
+        );
     }
 }
 
