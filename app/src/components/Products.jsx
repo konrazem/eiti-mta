@@ -42,14 +42,14 @@ class Products extends React.Component {
         if (this.state.error) {
             return <InfoPage text="Error while loading products. Skip and limit must be a number and limit > 0. Please check URL or contact with developer." />
         }
-        const { skip, limit, count, products } = this.state.data;
-
-        if (!products) {
+        if (!this.state.data) {
             return <Loading text="Loading products..." />;
         }
 
+
+        const { skip, limit, count, products } = this.state.data;
         let table = {
-            title: `Products(${limit})`,
+            title: `Products(${count})`,
             options: {
                 serverSide: false, // Enable remote data source! I do not want to rely on this.
                 pagination: true,

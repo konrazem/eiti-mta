@@ -72,11 +72,10 @@ router.post("/product", (req, res) => {
 });
 
 //update product
-router.put("/product", (req, res) => {
-    Product.updateMany(
-        {
-            id: req.body.id,
-        }, req.body,
+router.put("/product/:id", (req, res) => {
+    const id = req.params.id;
+
+    Product.updateMany({ id }, req.body,
         function (err, result) {
             if (err) {
                 res.status(400).send(
@@ -90,12 +89,11 @@ router.put("/product", (req, res) => {
 });
 
 // delete product
-router.delete("/product", (req, res) => {
+router.delete("/product/:id", (req, res) => {
+    const id = req.params.id;
+
     // as there are many products with the same id we need to removeMany by this id
-    Product.deleteMany(
-        {
-            id: req.body.id 
-        },
+    Product.deleteMany({ id },
         function (err, result) {
             if (err) {
                 res.status(400).send(
@@ -136,8 +134,12 @@ router.get("/products", (req, res) => {
 
 
     promiseProducts.then((products) => {
+
         return promiseCount.then( data => {
-            const count = data[0].count || -1;
+            let count = 0
+            if(data.length) {
+                count = data[0].count;
+            }
             return { products, count, skip, limit };
         });
     })

@@ -2,9 +2,10 @@ import React from "react";
 import Loading from "./Loading";
 import InfoPage from "./InfoPage";
 import ProductItems from "./ProductItems";
-import ProductToolbarDelete from "./ProductToolbarDelete";
-import { useHistory } from "react-router-dom";
 
+import AlertDialog from "./AlertDialog";
+import { Button, ButtonGroup, Toolbar, Typography } from "@material-ui/core";// import ProductToolbarDelete from "./ProductToolbarDelete";
+const URL = 'http://localhost:5000/product/';
 
 /**
  * @class Product
@@ -16,50 +17,61 @@ class Product extends React.Component {
         super(props);
 
         this.state = {
-            res: null,
+            data: null,
             error: null,
             disabled: true, // not edit mode on init
         };
     }
 
     componentDidMount() {
-        const history = useHistory();
-        const idInUrl = history.location.pathname.split("/")[2];
-        fetch("http://localhost:5000/product/" + idInUrl)
-            .then((res) => res.json())
-            .then((data) => this.setState({ data }))
+        const id = this.props.match.params.id
+        fetch(URL + id)
+            .then((res) => {
+                if (!res.ok) {
+                    this.setState({ error: true });
+                } else {
+                    return res.json()
+                }
+            })
+            .then((data) => {
+                this.setState({ data })
+            })
             .catch((error) => this.setState({ error }));
     }
 
-    handleEditClick() {
+    changeMode() {
         // turn on editMode
-        console.log(this.state.disabled);
-
         this.setState({
             disabled: !this.state.disabled,
         });
     }
 
-    handleCancelClick() {
-        // turn off editMode
-        console.log("turn off edit mode");
-        this.setState({
-            editMode: false,
-        });
+    handleDelete() {
+        const id = this.props.match.params.id
+        fetch(URL + id, {
+            method: 'DELETE'
+        })
+            .then(res => {
+                debugger;
+
+                if (!res.ok) {
+                    this.setState({ error: true })
+                } else {
+                    window.location = '/product/' + id;
+                }
+            })
+            .catch((error) => this.setState({ error }));
+
+
     }
 
-    handleDeleteClick() {
-        console.log("handle delete");
-    }
+    handleSave() {
 
-    handleSaveClick() {
-        console.log("handle save");
+        // here store data , get token etc...
+        alert("handle save");
     }
 
     render() {
-        // const { loading, data, prod, networkStatus, rates } = this.state.res;
-        // const { loading, data } = this.state.res;
-        // console.log("networkStatus: ", networkStatus);
         const { data, error, disabled } = this.state;
 
         if (error) {
@@ -67,7 +79,7 @@ class Product extends React.Component {
         }
 
         if (!data) {
-            // need to check timeout
+            // TODO: check timeout
             return (
                 <Loading
                     text="Loading products' data..."
@@ -77,7 +89,7 @@ class Product extends React.Component {
         }
 
         if (!data.length) {
-            return <InfoPage text="Product was not found." />;
+            return <InfoPage text="Product was not found or product was deleted." />;
         }
 
         const style = {
@@ -86,14 +98,28 @@ class Product extends React.Component {
                 padding: 10,
             }
         };
+
+        let toolbar = <ProductToolbarDelete
+            onChangeMode={this.changeMode.bind(this)}
+            onDelete={this.handleDelete.bind(this)}
+        />;
+
+
+        if (!disabled) {
+            toolbar = <ProductToolbarSave
+                onChangeMode={this.changeMode.bind(this)}
+                onSave={this.handleSave.bind(this)}
+            />
+        }
+
         return (
             <div style={style.root}>
-                <ProductToolbarDelete
-                    title="Prduct data"
-                    btnText
-                    handleEditClick={this.handleEditClick.bind(this)}
-                    handleDeleteClick={this.handleDeleteClick}
-                />
+
+
+
+                {toolbar}
+
+
                 <ProductItems
                     disabled={disabled}
                     product={data[0]}
@@ -101,6 +127,46 @@ class Product extends React.Component {
             </div>
         );
     }
+};
+
+
+const ProductToolbarDelete = ({ onChangeMode, onDelete, }) => <Toolbar>
+    <Typography variant="h6" style={{ flexGrow: 1 }}>
+        Products' data
+    </Typography>
+    <ButtonGroup
+        color="primary"
+        aria-label="outlined primary button group"
+    >
+        <Button onClick={onChangeMode}>Edit</Button>
+        <AlertDialog
+            text="Delete"
+            title="Do you want to delete this product?"
+            handleAgree={onDelete.bind(this)}
+        />
+    </ButtonGroup>
+</Toolbar>
+
+const ProductToolbarSave = ({ onChangeMode, onSave }) => {
+    return (
+        <Toolbar>
+            <Typography variant="h6" style={{ flexGrow: 1 }}>
+                Edit mode
+            </Typography>
+            <ButtonGroup
+                color="primary"
+                aria-label="outlined primary button group"
+            >
+                <Button onClick={onChangeMode}>Cancel</Button>
+                <AlertDialog
+                    text="Save"
+                    title="Do you want to save changes?"
+                    handleAgree={onSave.bind(this)}
+                />
+            </ButtonGroup>
+        </Toolbar>
+    );
 }
+
 
 export default Product;
