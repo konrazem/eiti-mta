@@ -122,7 +122,7 @@ const HeaderMenu = (props) => {
                     </StyledMenuItem>
                 </Link>
 
-                <Link to="/add" style={styles.link}>
+                <Link to="/" style={styles.link}>
                     <StyledMenuItem>
                         <ListItemIcon>
                             <AddIcon />

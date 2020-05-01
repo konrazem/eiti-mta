@@ -17,7 +17,7 @@ mongoose.connect(process.env.DATABASE_URL, {
     keepAlive: true,
 }, function(err) {
         if (err) {
-            console.log("**Error**  while connecting to MongoDB: ", err);
+            console.log("**Error** while connecting to MongoDB: ", err);
         } else {
             console.log("**Info**  Connected to MongoDB!");
         }

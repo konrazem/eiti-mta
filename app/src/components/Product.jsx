@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import InfoPage from "./InfoPage";
 import ProductItems from "./ProductItems";
 import ProductToolbarDelete from "./ProductToolbarDelete";
+import { useHistory } from "react-router-dom";
 
 
 /**
@@ -22,7 +23,8 @@ class Product extends React.Component {
     }
 
     componentDidMount() {
-        const idInUrl = this.props.history.location.pathname.split("/")[2];
+        const history = useHistory();
+        const idInUrl = history.location.pathname.split("/")[2];
         fetch("http://localhost:5000/product/" + idInUrl)
             .then((res) => res.json())
             .then((data) => this.setState({ data }))
@@ -32,7 +34,7 @@ class Product extends React.Component {
     handleEditClick() {
         // turn on editMode
         console.log(this.state.disabled);
-        
+
         this.setState({
             disabled: !this.state.disabled,
         });

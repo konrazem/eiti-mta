@@ -109,10 +109,17 @@ router.delete("/product", (req, res) => {
 });
 
 router.get("/products", (req, res) => {
-    const skip = Number(req.query.skip) || 0;
-    const limit = Number(req.query.limit) || 100;
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
+    const promiseCount = Product.aggregate([
+        {
+            $group: {
+                _id: "$id",
+            },
+        },
+    ]).count("count").exec();
 
-    Product.aggregate([
+    const promiseProducts = Product.aggregate([
         group,
         {
             $sort: {
@@ -123,13 +130,23 @@ router.get("/products", (req, res) => {
             $skip: skip,
         },
         {
-            $limit: limit,
+            $limit: limit, //limit === 0 ? 1 : limit, // MongoError: the limit must be positive
         },
-    ])
-        .then((data) => {
-            res.status(200).json(data);
-        })
-        .catch((err) => res.status(400).json("Error: ", err));
+    ]);
+
+
+    promiseProducts.then((products) => {
+        return promiseCount.then( data => {
+            const count = data[0].count || -1;
+            return { products, count, skip, limit };
+        });
+    })
+    .then((data) => {
+        res.status(200).json(data);
+    })
+    .catch((err) => {
+        res.status(400).json(err)
+    });
 });
 
 router.use(

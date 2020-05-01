@@ -1,14 +1,12 @@
-import React, { useRef } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Grid,
-    Avatar,
     Typography,
     Paper,
     Button,
     TextField,
 } from "@material-ui/core/";
-import InfoIcon from "@material-ui/icons/Info";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,87 +18,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Settings({ skip, limit }) {
+export default function Settings({ skip, limit, count }) {
     // const [values, setValues] = React.useState();
     const classes = useStyles();
-    const TextFieldSkip = useRef(null);
-    const TextFieldLimit = useRef(null);
+    const [_skip, setSkip] = React.useState(skip);
+    const [_limit, setLimit] = React.useState(limit);
+
+
     const handleSubmit = () => {
-        // get ref values
-        let skip = "0";
-        let limit = "200";
-        if (
-            TextFieldSkip.current.getElementsByTagName("input") &&
-            TextFieldLimit.current.getElementsByTagName("input")
-        ) {
-
-            skip = TextFieldSkip.current.getElementsByTagName("input")[0].value;
-            limit = TextFieldLimit.current.getElementsByTagName("input")[0].value;
-        }
-
-        if (parseInt(skip) || skip === "0") {
-            // NOTE: if(0) === false
-            if (parseInt(limit)) {
-                // if limit === '0' do NOT navigate. Moreover do not use history as table component will not render!
-                const url = `/products/skip/${skip}/limit/${limit}`;
-                window.location = url;
-            }
-        }
-    };
-
+        window.location = `/products/skip/${_skip}/limit/${_limit}`;
+    }
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <Grid container spacing={4}>
-                    <Grid
-                        item
-                        container
-                        spacing={2}
-                        direction="row"
-                        justify="flex-start"
-                    >
-                      
-                        <Grid item>
-                          <Typography variant="h5">
-                            Information about fetching data
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="body1">
-                                There may be lots of records to fetch which can slow down application. That is why 200 records are downloaded by default. In order to fetch more or less products from the
-                                database plase change skip/limit values in URL
-                                or below. Skip is a value of how many products
-                                to omit in the database. Limit is a number of
-                                products to fetch from the database starting
-                                from skip value. For example if in database
-                                there are 1000 records and user set skip to 200
-                                and limit to 1000, then 800 records will be
-                                retrievd from the database.
-                            </Typography>
-                            <Typography variant="body1">
-                                For example if in database
-                                there are 1000 records and user set skip to 200
-                                and limit to 1000, then 800 records will be
-                                retrievd from the database.
-                            </Typography>
-                            <Typography variant="caption">
-                              *You can check current skip and limit values in URL, in the placeholders inputs or in the table below.
-                            </Typography>
-                        </Grid>
+                    <Grid item>
+                        <Typography variant="h6">
+                            There are {count} products in database. You can portion this data with skip and limit values below or change URL.
+                        </Typography>
                     </Grid>
-                    <Grid
-                        item
-                        container
-                        spacing={2}
-                        direction="row"
-                        justify="flex-end"
-                    >
+                    <Grid container item spacing={2} justify="flex-end">
                         <Grid item>
                             <TextField
-                                ref={TextFieldSkip}
                                 id="textfiled-skip"
-                                placeholder={skip}
-                                label="skip"
+                                label={skip.toString()}
+                                placeholder="How many to skip"
+                                onChange={e => setSkip(e.target.value)}
                                 type="number"
                                 variant="outlined"
                             />
@@ -108,9 +51,9 @@ export default function Settings({ skip, limit }) {
                         <Grid item>
                             <TextField
                                 id="textfield-limit"
-                                ref={TextFieldLimit}
-                                label="limit"
-                                placeholder={limit}
+                                label={limit.toString()}
+                                placeholder="How many to load"
+                                onChange={e => setLimit(e.target.value)}
                                 type="number"
                                 variant="outlined"
                             />

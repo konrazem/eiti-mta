@@ -1,116 +1,55 @@
 import React from "react";
 import Loading from "./Loading";
 import Settings from "./Settings";
-import { gql } from "apollo-boost";
+import InfoPage from "./InfoPage";
 import MUIDataTable from "mui-datatables";
+import columns from '../columns';
 import { Grid } from "@material-ui/core";
 
 class Products extends React.Component {
-    /**
-     *Creates an instance of Products.
-     * @param {*} props
-     * @memberof Products
-     */
     constructor(props) {
         super(props);
 
         this.state = {
-            res: {}, // res from graphql products query
-            count: 0, // how many products
-            err: false,
+            data: false,
+            error: false
         };
     }
 
-    /**
-     *
-     *
-     * @memberof Products
-     */
     componentDidMount() {
-        // we need to set Header to fetch Token first?
-        const skip = this.props.match.params.skip;
-        const limit = this.props.match.params.limit;
-
-        this.props.client
-            .query({
-                query: gql`
-                    # Definition Schema language DSL
-                    {
-                        products(skip: ${skip}, limit: ${limit}) {
-                            _id
-                            name
-                            price
-                            currency
-                            brand
-                            condition
-                            isSale
-                            merchant
-                            shipping
-                            ean
-                            asins
-                            weight
-                            categories
-                            dateAdded
-                            dateUpdated
-                            manufacturer
-                            manufacturerNumber
-                            primaryCategories
-                            upc
-                            keys
-                            sourceURLs
-                        }
+        // make error proof on url
+        let skip = parseInt(this.props.match.params.skip);
+        let limit = parseInt(this.props.match.params.limit);
+        if (isNaN(skip) || isNaN(limit)) {
+            this.setState({ error: true });
+        } else {
+            const host = 'http://localhost:5000';
+            fetch(`${host}/products?skip=${skip}&limit=${limit}`)
+                .then(res => {
+                    if (!res.ok) {
+                        this.setState({ error: true });
+                    } else {
+                        return res.json()
                     }
-                `,
-            })
-            .then((products) => {
-                this.props.client
-                    .query({
-                        query: gql`
-                            # Definition Schema language DSL
-                            {
-                                count
-                            }
-                        `,
-                    })
-                    .then((count) => {
-                        this.setState({
-                            res: products,
-                            count: count.data.count,
-                        });
-                    });
-            })
-            .catch((err) => {
-                this.setState({ err });
-            });
+                })
+                .then(data => {
+                    this.setState({ data })
+                })
+        }
     }
 
-    /**
-     *
-     *
-     * @returns
-     * @memberof Products
-     */
     render() {
-        // const { loading, data, networkStatus, rates } = this.state.res;
-        const { loading, data, networkStatus, rates } = this.state.res;
-        console.log('networkStatus: ', networkStatus);
-        console.log('rates: ', rates);
-        
-        if (typeof loading === "undefined") {
+        if (this.state.error) {
+            return <InfoPage text="Error while loading products. Skip and limit must be a number and limit > 0. Please check URL or contact with developer." />
+        }
+        const { skip, limit, count, products } = this.state.data;
+
+        if (!products) {
             return <Loading text="Loading products..." />;
         }
 
-        // we have data. Check if there is any product
-        const products = data.products;
-        const history = this.props.history;
-        const skip = this.props.match.params.skip;
-        const limit = this.props.match.params.limit;
-        const count = this.state.count
-        /**
-         * Table settings for MUI Datatable
-         */
         let table = {
-            title: `Products (${limit}/${count})`,
+            title: `Products(${limit})`,
             options: {
                 serverSide: false, // Enable remote data source! I do not want to rely on this.
                 pagination: true,
@@ -131,7 +70,7 @@ class Products extends React.Component {
                     // Callback function that triggers when row(s) are selected. DO NOT HAVE EFFECT WHEN selectableRowsOnClick is true
                     // rowMeta: { dataIndex: number, rowIndex: number }
                     // Get ID and navigate to product
-                    history.push("/product/" + rowData[0]); // navigate to product page
+                    window.location = "/product/" + rowData[0]; // navigate to product page
                 },
 
                 // customToolbar: function() {
@@ -144,208 +83,14 @@ class Products extends React.Component {
             },
             rows: Array.isArray(products) && products,
             // NOTE: That order must be same as in client.queries. If not then different labels for different data!
-            columns: [
-                {
-                    name: "_id",
-                    label: "ID",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "name",
-                    label: "Name",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "price",
-                    label: "Price",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "currency",
-                    label: "Currency",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "brand",
-                    label: "Brand",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "condition",
-                    label: "Condition",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "isSale",
-                    label: "For Sale",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "merchant",
-                    label: "Merchant",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "shipping",
-                    label: "Shipping",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "ean",
-                    label: "EAN",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: true,
-                    },
-                },
-                {
-                    name: "asins",
-                    label: "Asins",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "weight",
-                    label: "Weight",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "categories",
-                    label: "Categories",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "dateAdded",
-                    label: "Added Date",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "dateUpdated",
-                    label: "Update Date",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "manufacturer",
-                    label: "Manufacturer",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-                {
-                    name: "manufacturerNumber",
-                    label: "Manufacturer Number",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-
-                {
-                    name: "primaryCategories",
-                    label: "Primary Categories",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: false,
-                    },
-                },
-
-                /** SHOW ONLY ON PRODUCT PAGE */
-                {
-                    name: "upc",
-                    label: "UPC",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: "false",
-                        viewColumns: false,
-                    },
-                },
-                {
-                    name: "keys",
-                    label: "Keys",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: "false",
-                        viewColumns: false,
-                    },
-                },
-                {
-                    name: "sourceURLs",
-                    label: "URL",
-                    options: {
-                        filter: false,
-                        sort: true,
-                        display: "false",
-                        viewColumns: false,
-                    },
-                },
-            ],
+            columns: columns,
         };
+        const settings = count > 1 ? <Settings skip={skip} limit={limit} count={count} /> : null;
+
         return (
             <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                    <Settings skip={skip} limit={limit} />
+                    {settings}
                 </Grid>
                 <Grid item xs={12} md={12}>
                     <MUIDataTable
