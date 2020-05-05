@@ -12,7 +12,7 @@ export default function InfoPage({ text }) {
                 </Avatar>
             </Box>
             <Box component="span" m={1} display="flex" justifyContent="center">
-                <p>{text}</p>
+                <p style={{ maxWidth: 400 }}>{text}</p>
             </Box>
         </div>
     );

@@ -13,7 +13,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 
-const AlertDialog = forwardRef(({ text, title, handleAgree }) => {
+const AlertDialog = ({ text, title, handleAgree }) => {
     const [open, setOpen] = React.useState(false);
 
     const onClick = () => {
@@ -52,6 +52,6 @@ const AlertDialog = forwardRef(({ text, title, handleAgree }) => {
             </Dialog>
         </div>
     );
-});
+};
 
 export default AlertDialog;

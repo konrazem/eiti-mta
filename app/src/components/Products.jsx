@@ -35,12 +35,16 @@ class Products extends React.Component {
                 .then(data => {
                     this.setState({ data })
                 })
+                .catch(err => {
+                    this.setState({ error: true });
+                })
         }
     }
 
     render() {
+
         if (this.state.error) {
-            return <InfoPage text="Error while loading products. Skip and limit must be a number and limit > 0. Please check URL or contact with developer." />
+            return <InfoPage text="Error while loading products. Possible reason: server is not running / skip and limit must be a number and limit > 0. Please check URL or contact with developer." />
         }
         if (!this.state.data) {
             return <Loading text="Loading products..." />;
@@ -85,7 +89,9 @@ class Products extends React.Component {
             // NOTE: That order must be same as in client.queries. If not then different labels for different data!
             columns: columns,
         };
-        const settings = count > 1 ? <Settings skip={skip} limit={limit} count={count} /> : null;
+        // show Settings tool only when count is grater then 
+        const LATENCY_FACTOR = 200;
+        const settings = count > LATENCY_FACTOR ? <Settings skip={skip} limit={limit} count={count} /> : null;
 
         return (
             <Grid container spacing={2}>

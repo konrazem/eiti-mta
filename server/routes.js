@@ -52,6 +52,8 @@ router.get("/product/:id", (req, res) => {
 
 // create product
 router.post("/product", (req, res) => {
+    console.log(req.body);
+    
     // create id
     let input = req.body;
     input._id = new mongoose.Types.ObjectId();
