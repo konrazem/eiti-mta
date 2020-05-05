@@ -2,13 +2,10 @@ import React from "react";
 import Loading from "./Loading";
 import InfoPage from "./InfoPage";
 import ProductItems from "./ProductItems";
-import AlertDialog from "./AlertDialog";
-import { Button, ButtonGroup, Toolbar, Typography } from "@material-ui/core";// import ProductToolbarDelete from "./ProductToolbarDelete";
-import { schema } from '../productModel';
-import { makeEmptyProduct } from '../util';
+import { Button, Toolbar, Typography } from "@material-ui/core";
+import { schema } from '../schema';
 
 const URL = 'http://localhost:5000/product';
-
 
 /**
  * @class Product
@@ -21,8 +18,8 @@ class Product extends React.Component {
 
         this.state = {
             data: null,
-            error: null,
-            disabled: true, // not edit mode on init
+            error: false,
+            editMode: false,
             newProduct: false
         };
 
@@ -34,11 +31,10 @@ class Product extends React.Component {
         const id = this.props.match.params.id;
         if (!id) {
             // this is create new product = make empty product
-            const emptyProduct = makeEmptyProduct(schema);
             this.setState({
-                data: [emptyProduct],
+                data: [{ ...schema }],
                 newProduct: true,
-                disabled: false
+                editMode: true
             });
         } else {
             // check product
@@ -61,7 +57,7 @@ class Product extends React.Component {
     changeMode() {
         // turn on editMode
         this.setState({
-            disabled: !this.state.disabled,
+            editMode: !this.state.editMode,
         });
     }
 
@@ -82,26 +78,30 @@ class Product extends React.Component {
 
     handleSave(data) {
         // add new product
-        fetch(URL, {
-            method: 'POST',
+        // check if data has id, if not then create one 
+
+        const url = this.state.newProduct ? URL : URL + '/' + data._id;
+
+        fetch(url, {
+            method: this.state.newProduct ? 'POST' : 'PUT',
             headers: {
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
             .then(res => {
-                debugger;
                 if (!res.ok) {
                     this.setState({ error: true })
                 } else {
-                    window.location = '/product/' + data.id;
+                    window.location = '/products/skip/0/limit/200';
                 }
             })
             .catch((error) => this.setState({ error }));
     }
 
     render() {
-        const { data, error, disabled, newProduct } = this.state;
+        const { data, error, editMode, newProduct } = this.state;
 
         if (error) {
             return <InfoPage text="Error while fetching the product." />;
@@ -120,6 +120,14 @@ class Product extends React.Component {
         if (!data.length) {
             return <InfoPage text="Product was not found or product was deleted." />;
         }
+        let title = 'Product';
+        if (editMode) {
+            title = 'Edit product';
+        }
+        if (newProduct) {
+            title = 'New product';
+        }
+
         return (
             <div style={{
                 flexGrow: 1,
@@ -127,14 +135,15 @@ class Product extends React.Component {
             }}>
                 <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        {disabled ? 'Product data' : 'Edit product'}
+                        {title}
                     </Typography>
-                    <Button onClick={this.changeMode.bind(this)} variant="contained" color="primary">{disabled ? 'Edit' : 'Cancel'}</Button>
+                    <Button onClick={this.changeMode.bind(this)} variant="contained" color="primary">{editMode ? 'Cancel' : 'Edit'}</Button>
                 </Toolbar>
                 <ProductItems
-                    disabled={disabled}
+                    editMode={editMode}
                     product={data[0]}
                     handleSave={this.handleSave}
+                    handleDelete={this.handleDelete}
                     newProduct={newProduct}
                 />
             </div>

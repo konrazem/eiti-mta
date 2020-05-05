@@ -76,16 +76,34 @@ const HeaderMenu = (props) => {
     function handleCloseMenu() {
         setAnchorEl(null);
     }
-    function handleLogout() {
-        window.location = "/logout";
-    }
-    const styles = {
-        link: {
-            textDecoration: 'none',
-            color: 'inherit'
-        }
-    };
 
+    const menu_items = [
+        {
+            text: 'Home',
+            icon: <HomeIcon />,
+            link: '/'
+        },
+        {
+            text: 'Products',
+            icon: <PageviewIcon />,
+            link: '/products/skip/0/limit/200'
+        },
+        {
+            text: 'Add product',
+            icon: <AddIcon />,
+            link: '/product'
+        },
+        {
+            text: 'Profile',
+            icon: <AccountCircle />,
+            link: '/profile'
+        },
+        {
+            text: 'Logout',
+            icon: <ExitToAppIcon />,
+            link: '/logout'
+        },
+    ];
 
     return (
         <div>
@@ -104,48 +122,13 @@ const HeaderMenu = (props) => {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
             >
-                <Link to="/" style={styles.link}>
-                    <StyledMenuItem>
-                        <ListItemIcon>
-                            <HomeIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Home" />
-                    </StyledMenuItem>
-                </Link>
-
-                <Link to="/products/skip/0/limit/200" style={styles.link}>
-                    <StyledMenuItem>
-                        <ListItemIcon>
-                            <PageviewIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Products" />
-                    </StyledMenuItem>
-                </Link>
-
-                <Link to="/product" style={styles.link}>
-                    <StyledMenuItem>
-                        <ListItemIcon>
-                            <AddIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Add product" />
-                    </StyledMenuItem>
-                </Link>
-
-                <Link to="/profile" style={styles.link}>
-                    <StyledMenuItem>
-                        <ListItemIcon>
-                            <AccountCircle />
-                        </ListItemIcon>
-                        <ListItemText primary="Profile" />
-                    </StyledMenuItem>
-                </Link>
-
-                <StyledMenuItem onClick={handleLogout}>
+                {menu_items.map((item, index) => <StyledMenuItem onClick={() => window.location = item.link} key={'menu-item-' + index}>
                     <ListItemIcon>
-                        <ExitToAppIcon />
+                        {item.icon}
                     </ListItemIcon>
-                    <ListItemText primary="Logout" />
-                </StyledMenuItem>
+                    <ListItemText primary={item.text} />
+                </StyledMenuItem>)}
+
             </StyledMenu>
         </div>
     );

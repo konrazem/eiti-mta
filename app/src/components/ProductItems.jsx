@@ -1,8 +1,5 @@
 import React from "react";
 import { genSettings } from '../util';
-import { schema } from '../productModel';
-
-
 import {
     List,
     ListItem,
@@ -12,11 +9,14 @@ import {
     TextField
 } from "@material-ui/core";
 
-export default function ProductItems({ product, disabled, handleSave, handleDelete, newProduct }) {
+
+
+
+export default function ProductItems({ product, editMode, handleSave, handleDelete, newProduct }) {
     const handleSubmit = e => {
         e.preventDefault();
         const elements = e.target.elements;
-        let result = { ...schema };
+        let result = { ...product };
         const keys = Object.keys(result);
 
         for (const key of keys) {
@@ -53,7 +53,7 @@ export default function ProductItems({ product, disabled, handleSave, handleDele
                                     style={{ margin: 8 }}
                                     defaultValue={item.defaultValue}
                                     fullWidth
-                                    disabled={disabled}
+                                    disabled={!editMode}
                                     margin="normal"
                                     type={item.type}
                                     InputLabelProps={{
@@ -65,7 +65,7 @@ export default function ProductItems({ product, disabled, handleSave, handleDele
                     })}
                 </List>
                 <ButtonGroup color="primary" aria-label="outlined primary button group">
-                    <Button type="submit" disabled={disabled}>save</Button>
+                    <Button type="submit" disabled={!editMode}>save</Button>
                     <Button disabled={newProduct} onClick={handleDelete}>delete</Button>
                 </ButtonGroup>
             </form>
