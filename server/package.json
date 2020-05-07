@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "express-graphql to featch data from mongo 'catalog' database. Eiti project",
   "private": true,
-  "main": "server.js",
+  "main": "localServer.js",
   "scripts": {
     "start": "node localServer.js",
     "dev": "nodemon localServer.js"

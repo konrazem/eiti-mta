@@ -1,9 +1,5 @@
 const Product = require("./mongoose/Product.model");
 const { group } = require("./mongoose/aggregation");
-const schema = require("./graphql/schema");
-const graphqlHTTP = require("express-graphql");
-const root = require("./graphql/root");
-// const express = require('express');
 const mongoose = require("mongoose");
 const router = require("express").Router();
 
@@ -180,19 +176,5 @@ router.get("/products", (req, res) => {
         res.status(400).json(err)
     });
 });
-
-router.use(
-    "/graphql",
-    graphqlHTTP((req) => {
-        return {
-            schema: schema,
-            rootValue: root,
-            graphiql: true,
-            customFormatErrorFn: (error) => ({
-                message: error.message,
-            }),
-        };
-    })
-);
 
 module.exports = router;

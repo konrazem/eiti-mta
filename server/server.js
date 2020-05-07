@@ -20,14 +20,14 @@ const { group } = require("./mongoose/aggregation");
 const schema = require("./graphql/schema");
 const root = require("./graphql/root");
 
-require("dotenv").config(); // to load environment vars from .env file like DATABASE_URL
+require("dotenv").config(); // to load environment vars from .env file like DB_URL
 
 //****************
 // ENV
 //****************
 const NODE_ENV = process.env.NODE_ENV; // prod or development like in React
 const PORT = process.env.PORT || 5000;
-const DATABASE_URL = process.env.DATABASE_URL || "http://localhost:2701"; // use Atlas db if not localhost
+const DB_URL = process.env.DB_URL || "http://localhost:2701"; // use Atlas db if not localhost
 // TODO: add all apps names best - pass object, add xsuaa service name!
 const WHITE_APP = process.env.WHITE_APP;
 
@@ -60,13 +60,13 @@ app.use(cors(corsOptions));
 // *******************************
 // MONGO
 // *******************************
-// mongoose.connect(DATABASE_URL, {
+// mongoose.connect(DB_URL, {
 //     useNewUrlParser: true,
 //     useUnifiedTopology: true,
 //     socketTimeoutMS: 0,
 //     keepAlive: true,
 // });
-mongoose.connect(DATABASE_URL, {
+mongoose.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     socketTimeoutMS: 0,
