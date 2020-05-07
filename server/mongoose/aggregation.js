@@ -64,5 +64,4 @@ const group = {
     }
 };
 
-
 module.exports = { 'group': group }

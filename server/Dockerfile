@@ -1,20 +1,23 @@
-ARG VERSION=10
 # set default password
+FROM node:10
 
-FROM node:${VERSION}
-
+ARG DB_URL
+ARG PORT=5000
 # set defualt environment variable to connect to mongo db
-ENV DATABASE_URL="mongodb+srv://konrazem:admin@mongocluster-a6fdy.mongodb.net/catalogs?retryWrites=true&w=majority"
-ENV NODE_ENV="production"
+ENV DB_URL=${DB_URL}
+ENV PORT=${PORT}
 
+WORKDIR /src/usr/app/
 
-# create and go into this directory 
-WORKDIR /home/kgrzyb/app/
-COPY . . 
+COPY ./mongoose .
+COPY localServer.js .
+COPY routes.js .
+COPY package.json .
 
 # add @sap registry 
 RUN npm config set @sap:registry https://npm.sap.com
+RUN npm install
 
-RUN npm install && node server.js
+EXPOSE ${PORT}
 
-EXPOSE 5001
+ENTRYPOINT [ "node", "localServer.js" ]

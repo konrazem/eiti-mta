@@ -1,43 +1,44 @@
 ---
 applications:
-  # React UI build 
+  # React UI build
   - name: eiti-app-build
     path: app-build
     memory: 128M
     instance: 1
-    services:
-      - eiti-ser-xsuaa
+  # docker:
+  # image: /konrazem/eiti-app:local
 
+  # services:
+  #   - eiti-ser-xsuaa
   # Router
-  - name: eiti-router # name of application and hence host name https://eiti-router.cfapps.eu10.hana.ondemand.com/
-    path: router
-    instances: 1
-    memory: 128M
-    env:
-      destinations: >
-        [
-          {
-            "name": "eiti-server",
-            "url": "https://eiti-server.cfapps.eu10.hana.ondemand.com/",
-            "forwardAuthToken": true
-          },
-          {
-            "name": "eiti-app-build",
-            "url": "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
-            "forwardAuthToken": true
-          }
-        ]
-    services:
-      - eiti-ser-xsuaa # configuratoions in xs-security.json
+  # - name: eiti-router # name of application and hence host name https://eiti-router.cfapps.eu10.hana.ondemand.com/
+  #   path: router
+  #   instances: 1
+  #   memory: 128M
+  #   env:
+  #     destinations: >
+  #       [
+  #         {
+  #           "name": "eiti-server",
+  #           "url": "https://eiti-server.cfapps.eu10.hana.ondemand.com/",
+  #           "forwardAuthToken": true
+  #         },
+  #         {
+  #           "name": "eiti-app-build",
+  #           "url": "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
+  #           "forwardAuthToken": true
+  #         }
+  #       ]
+  #     # - eiti-ser-xsuaa # configuratoions in xs-security.json
 
-
+  # services:
   # Server. Should fail on push there is no pass. Go to CF and change user env. Keep this app as last to push becuase of this issue
   - name: eiti-server
     path: server
     instances: 1
     memory: 128M
     env:
-      DATABASE_URL: mongodb+srv://konrazem:<pass>@mongocluster-a6fdy.mongodb.net/catalogs?retryWrites=true&w=majority
-      NODE_ENV: production
-    services:
-      - eiti-ser-xsuaa
+      DB_URL: mongodb+srv://konrazem:admin@mongocluster-a6fdy.mongodb.net/catalogs?retryWrites=true&w=majority
+      # NODE_ENV: production
+    # services:
+    #   - eiti-ser-xsuaa

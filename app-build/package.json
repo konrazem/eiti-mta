@@ -2,7 +2,7 @@
   "name": "eiti-app-build",
   "version": "1.0.0",
   "scripts": {
-    "start": "serve -s build"
+    "start": "serve -s build "
   },
   "description": "to run react build",
   "main": "index.js",

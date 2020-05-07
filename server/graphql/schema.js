@@ -12,11 +12,20 @@ const schema = buildSchema(`
     sourceURLs: String
   }
  
+  input PriceInput {
+    amountMax: Float!
+    condition: String 
+    currency: String
+    isSale: String
+    merchant: String    
+    shipping: String
+    sourceURLs: String  
+  }
   
   type Product {
-    _id: ID!
+    _id: ID! #  grouped by id and created _id which is now unique
     name: String
-    price: Float!
+    price: Float
     currency: String
     brand: String
     condition: String
@@ -27,7 +36,31 @@ const schema = buildSchema(`
     asins: String
     upc: String # The GraphQL specs limit the Integer type size to 32 bits. To be compliant, larger ints have to be treated as floats to prevent errors in query results. However not all upc numbers are float some are string and that cos error!!
     weight: String
-    cacategories: String
+    categories: String
+    dateAdded: String
+    dateUpdated: String
+    keys: String
+    manufacturer: String
+    manufacturerNumber: String
+    primaryCategories: String
+    sourceURLs: String
+  }
+
+  input ProductInput { # keep Input in the name!
+    id: String
+    name: String
+    prices: PriceInput
+    currency: String
+    brand: String
+    condition: String
+    isSale: String
+    merchant: String
+    shipping: String
+    ean: String
+    asins: String
+    upc: String
+    weight: String
+    categories: String
     dateAdded: String
     dateUpdated: String
     keys: String
@@ -52,15 +85,17 @@ const schema = buildSchema(`
   }
 
   type Query {
-    count: Float # if bigger set than 32-bit
+    count: Float # if bigger set, than 32-bit
     user(id: ID): User
     users: [User]
-    product(id: ID): Product
+    product(id: ID!): [Product]
     products(skip: Int, limit: Int): [Product]
   }
 
   type Mutation {
-    product(id: ID!): Product!
+    createProduct(input: ProductInput): Product
+    updateProduct(id: ID!, input: ProductInput): Product
+    deleteProduct(id: ID!): Product
   }
 
 `);
