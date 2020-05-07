@@ -1,22 +1,14 @@
 {
-  "welcomeFile": "/index.html",
-  "sessionTimeout": 10,
+  "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/(.*)$",
-      "localDir": "resources"
-    },
-    {
       "destination": "eiti-server",
-      "source": {
-        "path": "^/api/v1/(.*)$",
-        "matchCase": false
-      },
+      "source": "^/api/v1/(.*)$",
       "authenticationType": "xsuaa"
     },
     {
       "destination": "eiti-app-build",
-      "source": "^/(.*)$",
+      "source": "^/app(.*)$",
       "authenticationType": "xsuaa"
     }
   ]
