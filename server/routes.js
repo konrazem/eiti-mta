@@ -2,6 +2,8 @@ const Product = require("./mongoose/Product.model");
 const { group } = require("./mongoose/aggregation");
 const mongoose = require("mongoose");
 const router = require("express").Router();
+const convertToSchema = require('./util');
+
 
 router.get("/", (req, res) => {
     const file = require("path").join(__dirname, "index.html");
@@ -50,11 +52,11 @@ router.get("/product/:id", (req, res) => {
 router.post("/product", (req, res) => {
     // create id
     const input = req.body.prices ? req.body : convertToSchema(req.body);
-
+    console.log(convertToSchema(req.body));
     input._id = new mongoose.Types.ObjectId();
     input.id = input._id;
     const prod = new Product(input);
-
+    
     prod.save(function (err, data) {
         if (err) {
             res.status(400).json({
@@ -67,47 +69,19 @@ router.post("/product", (req, res) => {
     });
 });
 
-function convertToSchema(data) {
-    return {
-        "id": data._id,
-        "prices": {
-            "amountMax": data.price,
-            "condition": data.condition,
-            "currency": data.currency,
-            "isSale": data.isSale,
-            "merchant": data.merchant,
-            "shipping": data.shipping,
-            "sourceURLs": data.sourceURLs
-        },
-        "asins": data.asins,
-        "brand": data.brand,
-        "categories": data.categories,
-        "dateAdded": data.dateAdded,
-        "dateUpdated": data.dateUpdated,
-        "ean": data.ean,
-        "imageURLs":  data.imageURLs,
-        "keys":  data.keys,
-        "manufacturer": data.manufacturer,
-        "manufacturerNumber": data.manufacturerNumber,
-        "name": data.name,
-        "primaryCategories": data.primaryCategories,
-        "sourceURLs": data.sourceURLs,
-        "upc": data.upc,
-        "weight": data.weight
-    }
-}
 
 //The HTTP PUT request method creates a new resource or replaces a representation of the target resource with the request payload.
 router.put("/product/:id", (req, res) => {
     const data = req.body.prices ? req.body : convertToSchema(req.body);
+    console.log(convertToSchema(req.body));
     const id = req.params.id;
     Product.updateMany({ id }, data,
         function (err, result) {
             if (err) {
                 res.status(400).send(
                     `**Error**  While trying to remove many products with id ${req.body.id}`
-                );
-            } else {
+                    );
+                } else {
                 res.status(200).json(result);
             }
         }
