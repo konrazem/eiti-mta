@@ -23,13 +23,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-/**
- * Header
- * 
- * @export
- * @param {*} props 
- */
-const Header = (props) => {
+export default function Header() {
+
     const classes = useStyles();
     // anchor element is app bar icon
     const env = process.env.NODE_ENV === "development" ? "Development" : "Production";
@@ -37,7 +32,7 @@ const Header = (props) => {
     const title = "EITI App - " + env;
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} data-testid="Header">
             <AppBar position="sticky">
                 <Toolbar>
                     <Typography variant="subtitle1" className={classes.title}>
@@ -49,5 +44,3 @@ const Header = (props) => {
         </div>
     );
 };
-
-export default Header;

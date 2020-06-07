@@ -31,45 +31,72 @@ export function genSettings(schema) {
     return result;
 }
 
-/**
- *
- *
- * @export
- * @param {*} obj
- * @param {string} [val=""]
- * @returns {*}
- */
-export function makeEmptyProduct(obj, val = "") {
-    let result = {};
-    if (obj instanceof Object) {
-        const keys = Object.keys(obj);
-        for (const key of keys) {
-            result[key] = val;
+export function getResult(elements, product) {
+    let result = { ...product };
+    const keys = Object.keys(result);
+
+    for (const key of keys) {
+        if (elements.hasOwnProperty(key)) {
+            result[key] = elements[key].value || "";
         }
     }
     return result;
 }
 
-
-/**
- * @name 
- * @description Get values from arrays' objects. Used to fill mui-datatable rows
- * @export
- * @param {*} arr [{*}, {*}, ...]
- * @returns [[*], [*], ...]
- */
-export function getArrOfArrsOfObjsVals(arrOfObjs) {
-    var res = [];
-
-    arrOfObjs.map((ele, index) => {
-        if (typeof ele === "object") {
-            res.push(Object.values(ele));
-        } else {
-            res.push([]);
-        }
-    });
-
-    return res;
+export function fetchProducts() {
+    const URL = 'http://localhost:5000/products';
+    return fetch(URL)
+    .then((res) =>  res.json())
+    .catch((error) =>  'error' );
+}
+export function fetchPrfile() {
+    const URL = 'http://localhost:5000/profile';
+    return fetch(URL)
+    .then((res) =>  res.json())
+    .catch((error) =>  'error' );
 }
 
-export default { genSettings, makeEmptyProduct, getArrOfArrsOfObjsVals };
+export function fetchProduct(_id) {
+    const URL = 'http://localhost:5000/product';
+    return fetch(URL + '/' + _id)
+    .then((res) =>  res.json())
+    .catch((error) =>  'error' );
+}
+export function createProduct(data) {
+    const URL = 'http://localhost:5000/product';
+    return fetch(URL, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then((res) =>  res)
+    .catch((error) =>  'error' );
+}
+
+export function updateProduct(data) {
+    const URL = 'http://localhost:5000/product' + data._id;
+    return fetch(URL, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then((res) =>  res)
+    .catch((error) =>  'error' );
+}
+
+export function deleteProduct(_id) {
+    const URL = 'http://localhost:5000/product';
+    return fetch(URL + '/' + _id, {
+        method: 'DELETE'
+    })
+    .then((res) =>  res)
+    .catch((error) =>  'error' );
+}
+
+export default { genSettings, getResult, fetchProducts, fetchProduct, createProduct,updateProduct, deleteProduct };

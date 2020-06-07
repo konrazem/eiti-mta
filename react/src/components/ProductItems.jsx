@@ -1,5 +1,5 @@
 import React from "react";
-import { genSettings } from '../util';
+import { genSettings, getResult } from '../util';
 import {
     List,
     ListItem,
@@ -16,14 +16,8 @@ export default function ProductItems({ product, editMode, handleSave, handleDele
     const handleSubmit = e => {
         e.preventDefault();
         const elements = e.target.elements;
-        let result = { ...product };
-        const keys = Object.keys(result);
-
-        for (const key of keys) {
-            if (elements.hasOwnProperty(key)) {
-                result[key] = elements[key].value || "";
-            }
-        }
+        const result = getResult(elements, product);
+        debugger;
         handleSave(result);
     }
     const config = genSettings(product);
