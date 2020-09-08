@@ -81,7 +81,7 @@ class Product extends React.Component {
         // check if data has id, if not then create one 
 
         const url = this.state.newProduct ? URL : URL + '/' + data._id;
-
+        debugger;
         fetch(url, {
             method: this.state.newProduct ? 'POST' : 'PUT',
             headers: {

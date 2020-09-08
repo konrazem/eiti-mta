@@ -5,7 +5,7 @@ export default () => {
 
   const emoji = <span role='img' aria-label='emoji'>⭐</span>;
 
-  return (<div className="footer">
+  return (<div className="footer" data-testid="footer">
     <Box fontWeight="light" textAlign="center" fontStyle="italic" fontSize="" m={1}>
       {emoji} Copyrights © Konrad Grzyb 2019 {emoji}
     </Box>
