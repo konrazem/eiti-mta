@@ -7,7 +7,7 @@
       "authenticationType": "xsuaa"
     },
     {
-      "destination": "eiti-app-build",
+      "destination": "eiti-client",
       "source": "^/app(.*)$",
       "authenticationType": "xsuaa"
     }

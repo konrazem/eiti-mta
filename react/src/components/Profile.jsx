@@ -34,7 +34,7 @@ class Profile extends React.Component {
                 },
             },
             loaded: false,
-            error: "",
+            error: false,
         };
     }
 

@@ -13,8 +13,8 @@ applications:
             "forwardAuthToken": true
           },
           {
-            "name": "eiti-app-build",
-            "url": "https://eiti-app-build.cfapps.eu10.hana.ondemand.com/",
+            "name": "eiti-client",
+            "url": "https://eiti-client.cfapps.eu10.hana.ondemand.com/",
             "forwardAuthToken": true
           }
         ]
