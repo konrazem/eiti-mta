@@ -12,6 +12,23 @@ applications:
     services:
       - eiti-ser-xsuaa
 
+
+  # services:
+  # Server. Should fail on push there is no pass. Go to CF and change user env. Keep this app as last to push becuase of this issue
+  - name: eiti-server
+    path: server
+    instances: 1
+    memory: 128M
+    routes:
+      - route: https://eiti-server.cfapps.eu10.hana.ondemand.com
+    env:
+      DB_URL: mongodb+srv://konrazem:admin@mongocluster-a6fdy.mongodb.net/catalogs?retryWrites=true&w=majority
+      # NODE_ENV: production
+    services:
+      - eiti-ser-xsuaa
+
+
+
   # Router
   - name: eiti-router # name of application and hence host name https://eiti-router.cfapps.eu10.hana.ondemand.com/
     path: router
@@ -36,14 +53,3 @@ applications:
     services:
       - eiti-ser-xsuaa # configuratoions in xs-security.json
 
-  # services:
-  # Server. Should fail on push there is no pass. Go to CF and change user env. Keep this app as last to push becuase of this issue
-  - name: eiti-server
-    path: server
-    instances: 1
-    memory: 128M
-    env:
-      DB_URL: mongodb+srv://konrazem:admin@mongocluster-a6fdy.mongodb.net/catalogs?retryWrites=true&w=majority
-      # NODE_ENV: production
-    services:
-      - eiti-ser-xsuaa

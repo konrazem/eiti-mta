@@ -1,14 +1,17 @@
 {
   "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/logout"
+  },
   "routes": [
     {
-      "destination": "eiti-server",
-      "source": "^/api/v1/(.*)$",
+      "destination": "eiti-client",
+      "source": "^/client/(.*)$",
       "authenticationType": "xsuaa"
     },
     {
-      "destination": "eiti-client",
-      "source": "^/app(.*)$",
+      "destination": "eiti-server",
+      "source": "^/server/(.*)$",
       "authenticationType": "xsuaa"
     }
   ]

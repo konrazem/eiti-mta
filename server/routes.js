@@ -6,8 +6,7 @@ const convertToSchema = require('./util');
 
 
 router.get("/", (req, res) => {
-    const file = require("path").join(__dirname, "index.html");
-    res.status(200).sendFile(file);
+    res.status(200).json('Get Token Call');
 });
 
 // router.get("/token", (req, res) => {
