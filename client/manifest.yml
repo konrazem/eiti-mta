@@ -1,0 +1,12 @@
+---
+applications:
+  # React UI build
+  - name: eiti-client
+    memory: 128M
+    routes:
+      - route: https://eiti-client.cfapps.eu10.hana.ondemand.com
+    instance: 1
+    # docker:
+    # image: /konrazem/eiti-app:local
+    services:
+      - eiti-ser-xsuaa

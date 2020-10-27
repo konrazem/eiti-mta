@@ -12,4 +12,4 @@ RUN echo "run on port ${PORT}"
 
 # you cannot use ARG in ENTRYPOINT
 ENTRYPOINT serve -l "${PORT}" -s build
-#  docker run -d -p 5005:5004 --rm eiti-app-build:latest
+#  docker run -d -p 5005:5004 --rm eiti-client:latest
